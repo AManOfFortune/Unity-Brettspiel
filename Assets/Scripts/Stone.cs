@@ -86,7 +86,10 @@ public class Stone : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
 
             cTime = 0;
-            steps--;
+            if (!(fullRoute[routePosition].gameObject.tag == "InvisNode"))
+            {
+                steps--;
+            }
             doneSteps++;
         }
 
