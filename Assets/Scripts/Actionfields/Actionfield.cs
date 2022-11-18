@@ -8,4 +8,9 @@ public class Actionfield : MonoBehaviour, IActionfield
     {
         Debug.Log("This is an empty Action field");
     }
+
+    public virtual void changeVisuals(GameObject Node)
+    {
+        Debug.Log("This is an empty Action field");
+    }
 }

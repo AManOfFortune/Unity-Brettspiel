@@ -5,4 +5,5 @@ using UnityEngine;
 public interface IActionfield 
 {
     void performAction(Stone Piece);
+    void changeVisuals(GameObject Node);
 }

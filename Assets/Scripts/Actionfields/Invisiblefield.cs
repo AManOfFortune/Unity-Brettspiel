@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Debugfield : Actionfield
+public class Invisiblefield : Actionfield
 {
     public override void performAction(Stone Piece)
     {
-        Debug.Log("Hello, this is a Debug-field");
+        Debug.Log("This is an invisible field");
     }
 
     public override void changeVisuals(GameObject Node)
     {
-        Debug.Log("Debug-field doesnt have any Visuals");
+        Node.transform.localScale = new Vector3(0.5f, 1, 0.5f);
+        Node.transform.tag = "InvisibleField";
     }
 }

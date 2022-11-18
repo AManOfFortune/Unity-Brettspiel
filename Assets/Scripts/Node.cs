@@ -11,14 +11,18 @@ public class Node : MonoBehaviour
 
     private void Start()
     {
-        if (this.gameObject.tag == "InvisNode")
+        this.gameObject.tag = (Actions.Count > 0) ? "Actionfield" : "Defaultfield";
+
+        foreach (IActionfield Action in Actions)
         {
-            this.gameObject.transform.localScale = new Vector3(0.5f, 1, 0.5f);
+            Action.changeVisuals(this.gameObject);
         }
     }
 
     public void performActions(Stone Piece)
     {
+        Debug.Log("Performing " + Actions.Count + " Actions");
+        
         foreach(IActionfield Action in Actions)
         {
             Action.performAction(Piece);
