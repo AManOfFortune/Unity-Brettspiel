@@ -78,7 +78,9 @@ public class Stone : MonoBehaviour
         {
             routePosition++;
 
-            var nextPos = fullRoute[routePosition].gameObject.transform.position;
+            Node nextNode = fullRoute[routePosition];
+
+            var nextPos = nextNode.gameObject.transform.position;
             var startPos = fullRoute[routePosition - 1].gameObject.transform.position;
 
             while(MoveInArcToNextNode(startPos, nextPos, 5f)) { yield return null; }
@@ -86,7 +88,7 @@ public class Stone : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
 
             cTime = 0;
-            if (!(fullRoute[routePosition].gameObject.tag == "InvisNode"))
+            if (!(nextNode.gameObject.tag == "InvisNode"))
             {
                 steps--;
             }
@@ -94,6 +96,8 @@ public class Stone : MonoBehaviour
         }
 
         goalNode = fullRoute[routePosition];
+
+        goalNode.performActions(this);
 
         // Check possible kick
         if(goalNode.isTaken)

@@ -137,7 +137,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -336,6 +336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &86291199 stripped
 GameObject:
@@ -1439,6 +1440,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions:
+  - {fileID: 2051680273}
   stone: {fileID: 0}
 --- !u!1001 &296814055
 PrefabInstance:
@@ -1515,7 +1518,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2132,7 +2135,7 @@ RectTransform:
   - {fileID: 869541513}
   - {fileID: 337324188}
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2478,7 +2481,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2786,7 +2789,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &427855525
 PrefabInstance:
@@ -2863,6 +2866,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &429204311
 PrefabInstance:
@@ -2873,7 +2877,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: fb00153080547f64088aea74ab5a5d0f, type: 3}
       propertyPath: m_RootOrder
-      value: 23
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fb00153080547f64088aea74ab5a5d0f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2949,6 +2953,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &473412273
 PrefabInstance:
@@ -3039,6 +3044,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &492649758
 GameObject:
@@ -3326,6 +3332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &559691857 stripped
 GameObject:
@@ -3350,6 +3357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &673966432
 PrefabInstance:
@@ -3773,6 +3781,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &762329227
 PrefabInstance:
@@ -3859,6 +3868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &805048888
 PrefabInstance:
@@ -4001,6 +4011,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &826703153
 PrefabInstance:
@@ -4011,7 +4022,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4310,6 +4321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &892805424
 PrefabInstance:
@@ -4320,7 +4332,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4628,6 +4640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &946555077 stripped
 GameObject:
@@ -4774,6 +4787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &958654553
 GameObject:
@@ -4996,6 +5010,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &974139466
 PrefabInstance:
@@ -5199,6 +5214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &995752237
 PrefabInstance:
@@ -5280,6 +5296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1001940757
 PrefabInstance:
@@ -5556,6 +5573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1082122573
 PrefabInstance:
@@ -5632,6 +5650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1082195165
 PrefabInstance:
@@ -5708,6 +5727,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions:
+  - {fileID: 2051680273}
   stone: {fileID: 0}
 --- !u!1 &1092013743
 GameObject:
@@ -5833,7 +5854,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6248,6 +6269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1204201462 stripped
 GameObject:
@@ -6272,6 +6294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1217920122
 PrefabInstance:
@@ -6282,7 +6305,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6454,6 +6477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1234195694 stripped
 GameObject:
@@ -6478,6 +6502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1244987381
 PrefabInstance:
@@ -6558,6 +6583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1245364140
 PrefabInstance:
@@ -6568,7 +6594,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6802,6 +6828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1269633929 stripped
 GameObject:
@@ -6826,6 +6853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1275100590 stripped
 GameObject:
@@ -6845,6 +6873,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1281990792
 PrefabInstance:
@@ -6925,6 +6954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1291501563 stripped
 GameObject:
@@ -7016,6 +7046,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1305651715
 GameObject:
@@ -7215,6 +7246,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions:
+  - {fileID: 2051680273}
   stone: {fileID: 0}
 --- !u!1 &1310762795
 GameObject:
@@ -7344,7 +7377,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7459,6 +7492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1337896230
 GameObject:
@@ -7588,7 +7622,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7649,7 +7683,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7830,6 +7864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1375250076
 GameObject:
@@ -8163,7 +8198,7 @@ Transform:
   - {fileID: 293593048}
   - {fileID: 1485299333}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1416432963 stripped
 GameObject:
@@ -8183,6 +8218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1421481993 stripped
 GameObject:
@@ -8202,6 +8238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1431447742
 GameObject:
@@ -8451,6 +8488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1451734032 stripped
 GameObject:
@@ -8470,6 +8508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1468874957 stripped
 GameObject:
@@ -8494,6 +8533,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1475398940 stripped
 GameObject:
@@ -8513,6 +8553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1475495262
 PrefabInstance:
@@ -8523,7 +8564,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8731,6 +8772,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1535473998 stripped
 GameObject:
@@ -8750,6 +8792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1537973715
 PrefabInstance:
@@ -8826,6 +8869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1543716872
 PrefabInstance:
@@ -8906,6 +8950,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1580653526
 GameObject:
@@ -9050,6 +9095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1588510286
 GameObject:
@@ -9300,7 +9346,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9473,6 +9519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1636023066
 PrefabInstance:
@@ -9549,6 +9596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1660465635
 PrefabInstance:
@@ -9629,6 +9677,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1668573444
 PrefabInstance:
@@ -9709,6 +9758,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1672973209
 GameObject:
@@ -9847,6 +9897,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1684111247
 PrefabInstance:
@@ -9923,6 +9974,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1687310143
 PrefabInstance:
@@ -9933,7 +9985,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10048,6 +10100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1703024800
 PrefabInstance:
@@ -10124,7 +10177,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
+--- !u!1 &1755962595
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1755962596}
+  - component: {fileID: 1755962597}
+  m_Layer: 0
+  m_Name: Actionfields
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1755962596
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755962595}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2051680274}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1755962597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755962595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: add3f6c7f0d205a49abe86e74cbe61c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1771504393
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10209,6 +10308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1775707011
 PrefabInstance:
@@ -10347,6 +10447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1784745388 stripped
 GameObject:
@@ -10366,6 +10467,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1796601368
 GameObject:
@@ -10509,6 +10611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1846653271
 GameObject:
@@ -10776,6 +10879,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions:
+  - {fileID: 2051680273}
   stone: {fileID: 0}
 --- !u!1 &1861511440
 GameObject:
@@ -10893,6 +10998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1898365886 stripped
 GameObject:
@@ -10912,7 +11018,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
+--- !u!114 &1898365890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898365886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: add3f6c7f0d205a49abe86e74cbe61c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1912842117 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 98c7ea28bd201de4c9b56980386fbd40, type: 3}
@@ -10931,6 +11050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1914146607
 PrefabInstance:
@@ -11011,6 +11131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1918270290
 GameObject:
@@ -11141,6 +11262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1952124497
 PrefabInstance:
@@ -11151,7 +11273,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11266,6 +11388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1970942254 stripped
 GameObject:
@@ -11285,6 +11408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1978259610
 GameObject:
@@ -11320,7 +11444,7 @@ Transform:
   - {fileID: 1479530079}
   - {fileID: 1861511442}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1984553416 stripped
 GameObject:
@@ -11340,6 +11464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &1987925195
 GameObject:
@@ -11436,7 +11561,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1987941276 stripped
 GameObject:
@@ -11456,6 +11581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &1992041868
 PrefabInstance:
@@ -11537,6 +11663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &2002574638
 PrefabInstance:
@@ -11617,6 +11744,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &2004241097
 PrefabInstance:
@@ -11627,7 +11755,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_RootOrder
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f74f1bb95eca9ba44961c50daf8f8e60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11799,6 +11927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &2049777076
 PrefabInstance:
@@ -11861,6 +11990,50 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98c7ea28bd201de4c9b56980386fbd40, type: 3}
+--- !u!1 &2051680272
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2051680274}
+  - component: {fileID: 2051680273}
+  m_Layer: 0
+  m_Name: Debugfield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2051680273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051680272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7576e89cc5323349a1c4e7436bf9d32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2051680274
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051680272}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1755962596}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2062307909
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11945,6 +12118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &2078195786 stripped
 GameObject:
@@ -11964,6 +12138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1001 &2095229029
 PrefabInstance:
@@ -12040,6 +12215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
 --- !u!1 &2100306933 stripped
 GameObject:
@@ -12059,4 +12235,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
+  Actions: []
   stone: {fileID: 0}
