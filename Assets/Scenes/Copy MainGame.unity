@@ -5700,7 +5700,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTaken: 0
-  Actions: []
+  Actions:
+  - {fileID: 308376176}
   stone: {fileID: 0}
 --- !u!1001 &1082195165
 PrefabInstance:

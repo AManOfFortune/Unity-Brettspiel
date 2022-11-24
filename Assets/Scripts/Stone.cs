@@ -24,6 +24,7 @@ public class Stone : MonoBehaviour
     private int startNodeIndex; // Index in the common route of the starting node
 
     public int steps; // Rolled dice amount (number of steps we want to walk)
+    public int savedsteps; 
     private int doneSteps = 0; // Steps completed
     private int timer;
 
@@ -99,19 +100,19 @@ public class Stone : MonoBehaviour
         isMoving = false;
     }
 
-    public IEnumerator MovePiece(int steps)
+    public IEnumerator MovePiece(int stepstomove)
     {
-        if(steps == 0) yield break; // halts if you are trying to move 0 spaces
+        if(stepstomove == 0) yield break; // halts if you are trying to move 0 spaces
 
-        timer += steps;
+        timer += stepstomove;
 
-        int forward = steps / Mathf.Abs(steps);
+        int forward = stepstomove / Mathf.Abs(steps);
 
-        Debug.Log(steps + " - " + steps * forward);
+        Debug.Log(stepstomove + " - " + stepstomove * forward);
 
-        while (steps * forward > 0)
+        while (stepstomove * forward > 0)
         {
-            Debug.Log(steps + " - " + steps * forward);
+            Debug.Log(stepstomove + " - " + stepstomove * forward);
             int oldroutePosition = routePosition;
             routePosition += forward;
 
@@ -126,14 +127,22 @@ public class Stone : MonoBehaviour
 
             Node nextNode = fullRoute[routePosition];
 
-            if (nextNode.gameObject.tag == "InvisNode")
+            if (nextNode.gameObject.tag == "SlipperyNode")
             {
-                nextNode.performActions(this);
-            } else {
-                steps -= forward;
-                if(forward > 0)
+                nextNode.performSlipperyActions(this);
+            }
+            else
+            {
+                stepstomove -= forward;
+                if (forward > 0)
                 {
                     doneSteps++;
+                }
+                if (nextNode.gameObject.tag == "StickyNode")
+                {
+                    savedsteps = stepstomove;
+                    stepstomove = 0;
+                    nextNode.performStickyActions(this);
                 }
             }
         }
@@ -156,7 +165,7 @@ public class Stone : MonoBehaviour
         goalNode.isTaken = true;
 
         // Check if the goalNode had any actions
-        goalNode.performActions(this);
+        goalNode.performOnEndActions(this);
 
         // Set current to next node
         currentNode = goalNode;

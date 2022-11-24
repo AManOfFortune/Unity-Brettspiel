@@ -7,7 +7,8 @@ TagManager:
   - Ground
   - Actionfield
   - Defaultfield
-  - InvisibleField
+  - Stickyfield
+  - Slipperyfield
   layers:
   - Default
   - TransparentFX
