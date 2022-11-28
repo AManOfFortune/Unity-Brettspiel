@@ -23,8 +23,10 @@ public class Stone : MonoBehaviour
     private int routePosition; // Index in full Route of current position
     private int startNodeIndex; // Index in the common route of the starting node
 
-    private int steps; // Rolled dice amount (number of steps we want to walk)
+    public int steps; // Rolled dice amount (number of steps we want to walk)
+    public int savedsteps; 
     private int doneSteps = 0; // Steps completed
+    private int timer;
 
     [Header("Bools")]
     public bool isOut;
@@ -74,26 +76,81 @@ public class Stone : MonoBehaviour
 
         isMoving = true;
 
-        while(steps > 0)
+        StartCoroutine(MovePiece(rolledDice));
+
+        for (; timer > 0; timer--)
         {
-            routePosition++;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        yield return new WaitForSeconds(0.2f);
+
+        // Report to game manager
+        // Check if player won
+        if (WinCondition())
+        {
+            GameManager.instance.ReportWinning();
+        }
+
+        // Roll dice again if a 6 was rolled
+        if (rolledDice == 6) GameManager.instance.state = GameManager.States.ROLL_DICE;
+        // Switch the player otherwise
+        else GameManager.instance.state = GameManager.States.SWITCH_PLAYER;
+
+        isMoving = false;
+    }
+
+    public IEnumerator MovePiece(int stepstomove)
+    {
+        if(stepstomove == 0) yield break; // halts if you are trying to move 0 spaces
+
+        timer += stepstomove;
+
+        int forward = stepstomove / Mathf.Abs(steps);
+
+        Debug.Log(stepstomove + " - " + stepstomove * forward);
+
+        while (stepstomove * forward > 0)
+        {
+            Debug.Log(stepstomove + " - " + stepstomove * forward);
+            int oldroutePosition = routePosition;
+            routePosition += forward;
 
             var nextPos = fullRoute[routePosition].gameObject.transform.position;
-            var startPos = fullRoute[routePosition - 1].gameObject.transform.position;
+            var startPos = fullRoute[oldroutePosition].gameObject.transform.position;
 
-            while(MoveInArcToNextNode(startPos, nextPos, 5f)) { yield return null; }
+            while (MoveInArcToNextNode(startPos, nextPos, 5f)) { yield return null; }
 
             yield return new WaitForSeconds(0.1f);
 
             cTime = 0;
-            steps--;
-            doneSteps++;
+
+            Node nextNode = fullRoute[routePosition];
+
+            if (nextNode.gameObject.tag == "SlipperyNode")
+            {
+                nextNode.performSlipperyActions(this);
+            }
+            else
+            {
+                stepstomove -= forward;
+                if (forward > 0)
+                {
+                    doneSteps++;
+                }
+                if (nextNode.gameObject.tag == "StickyNode")
+                {
+                    savedsteps = stepstomove;
+                    stepstomove = 0;
+                    nextNode.performStickyActions(this);
+                }
+            }
         }
 
         goalNode = fullRoute[routePosition];
-
+        
         // Check possible kick
-        if(goalNode.isTaken)
+        if (goalNode.isTaken)
         {
             // Kick the other stone
             goalNode.stone.ReturnToBase();
@@ -107,23 +164,13 @@ public class Stone : MonoBehaviour
         goalNode.stone = this;
         goalNode.isTaken = true;
 
+        // Check if the goalNode had any actions
+        goalNode.performOnEndActions(this);
+
         // Set current to next node
         currentNode = goalNode;
         goalNode = null;
 
-        // Report to game manager
-        // Check if player won
-        if(WinCondition())
-        {
-            GameManager.instance.ReportWinning();
-        }
-
-        // Roll dice again if a 6 was rolled
-        if (rolledDice == 6) GameManager.instance.state = GameManager.States.ROLL_DICE;
-        // Switch the player otherwise
-        else GameManager.instance.state = GameManager.States.SWITCH_PLAYER;
-
-        isMoving = false;
     }
 
     private IEnumerator MoveOutOfBase() // Coroutine to move player out of base
