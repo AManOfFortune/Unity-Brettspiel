@@ -1,14 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    public bool isTaken;
     public List<Actionfield> OnEndActions = new List<Actionfield>();
     public List<Actionfield> StickyActions = new List<Actionfield>();
     public List<Actionfield> SlipperyActions = new List<Actionfield>();
-    public Stone stone;
+    
+    [NonSerialized] public bool isTaken;
+
+    [NonSerialized] public Stone stone;
 
     private void Start()
     {
