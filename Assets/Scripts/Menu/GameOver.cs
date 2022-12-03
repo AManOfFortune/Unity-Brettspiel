@@ -11,9 +11,9 @@ public class GameOver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        first.text = "1st: " + SaveSettings.winners[0];
-        second.text = "2nd: " + SaveSettings.winners[1];
-        third.text = "3rd: " + SaveSettings.winners[2];
+        first.text = "1st: " + GameSettings.WinnerNames[0];
+        second.text = "2nd: " + GameSettings.WinnerNames[1];
+        third.text = "3rd: " + GameSettings.WinnerNames[2];
     }
 
     public void BackButton()

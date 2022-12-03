@@ -1,399 +1,147 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    [NonSerialized] public static GameManager Instance;
 
-    [System.Serializable]
-    public class Player
-    {
-        public string name;
-        public List<Stone> stones;
-        public bool hasTurn;
+    public float MovementSpeed = 5f;
+    public float MovementArcHeight = 0.5f;
 
-        public enum PlayerTypes
-        {
-            HUMAN,
-            NPC,
-            NO_PLAYER
-        }
+    public Route CommonRoute;
+    [SerializeField] private Dice GameDice;
+    [SerializeField] private CameraController CameraController;
 
-        public PlayerTypes type;
-
-        public bool hasWon;
-    }
-
-    public List<Player> playerList = new();
-
-    // Statemachine
-    public enum States
-    {
-        WAITING,
-        ROLL_DICE,
-        SWITCH_PLAYER
-    }
-
-    public States state;
-
-    public int activePlayer; // Index of active player in playerList
-    private bool switchingPlayer;
-    private bool turnPossible = true;
-
-    // Human Inputs
-    // Gameobject for button
-    public GameObject rollDiceButton;
-    [HideInInspector] public int rolledHumanDice;
-
-    public Dice dice;
+    [SerializeField] private List<Player> Players = new();
+    private int ActivePlayer; // Index of currently playing player in player list
 
     private void Awake()
     {
-        instance = this;
+        // Fills player list
+        Players = new(FindObjectsOfType<Player>());
 
-        for(int i = 0; i < playerList.Count; i++)
-        {
-            if (SaveSettings.players[i] == "Human") playerList[i].type = Player.PlayerTypes.HUMAN;
-            else if (SaveSettings.players[i] == "NPC") playerList[i].type = Player.PlayerTypes.NPC;
-        }
+        Instance = this;
     }
 
     private void Start()
     {
-        ActivateButton(false);
-
-        activePlayer = Random.Range(0, playerList.Count);
-
-        Info.Instance.ShowMessage(playerList[activePlayer].name + " starts first!");
+        StartGame();
     }
 
-    private void Update()
+    public void StartGame()
+    {   
+        InitializePlayers(); // Initializes the players
+
+        UIManager.Instance.RollDiceButtonVisible(false); // Makes sure the roll dice button is hidden
+
+        ActivePlayer = UnityEngine.Random.Range(0, Players.Count); // Randomize which player starts
+
+        UIManager.Instance.ShowMessage(Players[ActivePlayer].Name + " starts first!");
+
+        StateMachine.Instance.State = StateMachine.States.ROLL_DICE; // Change state to ROLL_DICE
+    }
+
+    public Player GetActivePlayer()
     {
-        if (playerList[activePlayer].type == Player.PlayerTypes.NPC)
+        return Players[ActivePlayer];
+    }
+
+    // Starts the physical dice roll
+    public void RollDice(int delayBySeconds = 0)
+    {
+        StartCoroutine(DelayBySeconds(delayBySeconds, () =>
         {
-            switch (state)
+            if(GetActivePlayer().Type == Player.PlayerTypes.HUMAN) CameraController.MoveToDiceArena(); // Zoom camera to dice arena if player is human
+
+            GameDice.RollDice();
+        }));
+    }
+
+    public void SwitchPlayer(int delayBySeconds = 0)
+    {
+        if (StateMachine.Instance.SomethingIsHappening) return;
+
+        StateMachine.Instance.SomethingIsHappening = true;
+
+        StartCoroutine(DelayBySeconds(delayBySeconds, () =>
+        {
+            ActivePlayer++;
+            ActivePlayer %= Players.Count;
+
+            // If game is over, return (function automatically switches scene)
+            if (CheckIsGameover()) return;
+
+            // If current active player has already won, go to the next player (call function again)
+            if (GetActivePlayer().HasWon)
             {
-                case States.ROLL_DICE:
-                    if (turnPossible)
-                    {
-                        StartCoroutine(RollDiceDelay());
-                        state = States.WAITING;
-                    }
-                    break;
-                case States.SWITCH_PLAYER:
-                    if (turnPossible)
-                    {
-                        StartCoroutine(SwitchPlayer());
-                        state = States.WAITING;
-                    }
-                    break;
-                case States.WAITING: // Idle, waits for next input
-                    break;
+                SwitchPlayer(0);
+                return;
             }
-        }
+            
+            // If current player is playing and game is not over, show message and change state to ROLL_DICE
+            UIManager.Instance.ShowMessage(GetActivePlayer().Name + "'s turn!");
 
-        else if (playerList[activePlayer].type == Player.PlayerTypes.HUMAN)
+            StateMachine.Instance.State = StateMachine.States.ROLL_DICE;
+        }));
+
+        StateMachine.Instance.SomethingIsHappening = false;
+    }
+
+    // Once physical dice roll is done, this function gets called with the results
+    public void ReportDiceRollResults(int diceRollResult)
+    {
+        if (GetActivePlayer().Type == Player.PlayerTypes.HUMAN) CameraController.ResetPosition(); // Move zoomed camera back if player is human
+
+        UIManager.Instance.ShowMessage(GetActivePlayer().Name + " has rolled " + diceRollResult);
+
+        // Moves after a 2 second delay to give the camera time to move to its original position
+        StartCoroutine(DelayBySeconds(2, () =>
         {
-            switch (state)
-            {
-                case States.ROLL_DICE:
-                    if (turnPossible)
-                    {
-                        // Deactivate highlights
-                        ActivateButton(true);
-                        state = States.WAITING;
-                    }
-                    break;
-                case States.SWITCH_PLAYER:
-                    if (turnPossible)
-                    {
-                        // Deactivate button
-                        // Deactivate highlights
-                        StartCoroutine(SwitchPlayer());
-                        state = States.WAITING;
-                    }
-                    break;
-                case States.WAITING: // Idle, waits for next input
-                    break;
-            }
+            // Move with the result and the condition for leaving the base is called
+            GetActivePlayer().Move(diceRollResult, diceRollResult > 0);
+        }));
+    }
+
+    private void InitializePlayers()
+    {
+        foreach(Player player in Players)
+        {
+            player.Type = GameSettings.PlayerNamesAndTypes.ContainsKey(player.Name) ? GameSettings.PlayerNamesAndTypes[player.Name] : Player.PlayerTypes.NPC; // Sets the player type to what was set in main menu, or to default NPC
+            player.SpawnStones(); // Spawns all player stones on their respective base
+            player.CreateFullRoute(); // Creates the full route list
         }
     }
 
-    private void NPCDice()
+    private bool CheckIsGameover()
     {
-        dice.RollDice();
-    }
-
-    public void RollDice(int rolledDice) // Called from Dice
-    {
-        if (playerList[activePlayer].type == Player.PlayerTypes.NPC)
-        {
-            if (rolledDice == 6)
-            {
-                // check the start node
-                CheckStartNode(rolledDice);
-            }
-            else
-            {
-                // check for move
-                MoveAStone(rolledDice);
-            }
-        }
-
-        else if (playerList[activePlayer].type == Player.PlayerTypes.HUMAN)
-        {
-            rolledHumanDice = rolledDice;
-            HumanDiceRoll();
-        }
-
-        Info.Instance.ShowMessage(playerList[activePlayer].name + " has rolled " + rolledDice);
-    }
-
-    private IEnumerator RollDiceDelay()
-    {
-        yield return new WaitForSeconds(2);
-        NPCDice();
-    }
-
-    private void CheckStartNode(int rolledDiceNumber)
-    {
-        // Is anyone on the start node?
-        bool startNodeFull = false;
-
-        //Loop through all the active players stones and check if one of his stones is on the start position
-        foreach (var stone in playerList[activePlayer].stones)
-        {
-            if(stone.currentNode == stone.StartNode)
-            {
-                startNodeFull = true;
-                break;
-            }
-        }
-
-        if(startNodeFull) // Move a stone since start node is full
-        {
-            MoveAStone(rolledDiceNumber);
-        }
-        else // Move a stone out of the base if at least one is inside base
-        {
-            // Loop stones and check if one is inside base
-            foreach (var stone in playerList[activePlayer].stones)
-            {
-                // If a stone is not out, leave the base
-                if (!stone.ReturnIsOut())
-                {
-                    stone.LeaveBase();
-                    state = States.WAITING;
-                    return;
-                }
-            }
-
-            MoveAStone(rolledDiceNumber);
-        }
-    }
-
-    private void MoveAStone(int rolledDice)
-    {
-        List<Stone> moveableStones = new();
-        List<Stone> moveKickStones = new();
-
-        // Fill lists
-        foreach(var stone in playerList[activePlayer].stones)
-        {
-            if(stone.ReturnIsOut())
-            {
-                // Check for possible kick
-                if(stone.CheckPossibleKick(stone.stoneID, rolledDice))
-                {
-                    moveKickStones.Add(stone);
-                    continue;
-                }
-
-                // Check for possible move
-                if(stone.CheckPossibleMove(rolledDice))
-                {
-                    moveableStones.Add(stone);
-                }
-            }
-        }
-
-        // Perform kick if possible
-        if(moveKickStones.Count > 0)
-        {
-            int randomIndex = Random.Range(0, moveKickStones.Count);
-
-            moveKickStones[randomIndex].StartMove(rolledDice);
-            state = States.WAITING;
-            return;
-        }
-
-        // Perform move if possible
-        if (moveableStones.Count > 0)
-        {
-            int randomIndex = Random.Range(0, moveableStones.Count);
-
-            moveableStones[randomIndex].StartMove(rolledDice);
-            state = States.WAITING;
-            return;
-        }
-
-        // If no possible move, switch player
-        state = States.SWITCH_PLAYER;
-    }
-
-    private IEnumerator SwitchPlayer()
-    {
-        if(switchingPlayer) { yield break; }
-
-        switchingPlayer = true;
-
-        yield return new WaitForSeconds(2);
-
-        // Set next active player
-        SetNextActivePlayer();
-
-        switchingPlayer = false;
-    }
-
-    private void SetNextActivePlayer()
-    {
-        activePlayer++;
-        activePlayer %= playerList.Count;
-
-        // Makes sure that at least 2 players are still playing
+        // Loop all players and count how many are still in the game
         int available = 0;
-        foreach(var player in playerList)
+        foreach (var player in Players)
         {
-            if (!player.hasWon) available++;
+            if (!player.HasWon) available++;
         }
 
-        if (playerList[activePlayer].hasWon && available > 1)
-        {
-            SetNextActivePlayer();
-            return;
-        }
-        else if (available < 2)
+        // If 1 or less players are still playing, load the game over screen
+        if(available <= 1)
         {
             // Game over screen
             SceneManager.LoadScene("GameOver");
-            state = States.WAITING;
-            return;
+            StateMachine.Instance.State = StateMachine.States.WAITING;
+            return true;
         }
 
-        Info.Instance.ShowMessage(playerList[activePlayer].name + "'s turn!");
-
-        state = States.ROLL_DICE;
+        return false;
     }
 
-    public void ReportTurnPossible(bool possible)
+    // Helper function to easily delay function execution outside of an IEnumerator
+    private IEnumerator DelayBySeconds(int delay, Action doThisAfterDelay)
     {
-        turnPossible = possible;
+        yield return new WaitForSeconds(delay);
+
+        doThisAfterDelay();
     }
-
-    public void ReportWinning()
-    {
-        // TODO: Show some UI
-        playerList[activePlayer].hasWon = true;
-        // Save winner
-        SaveSettings.winners.Add(playerList[activePlayer].name);
-    }
-
-    // ------------------------------------------------- Human Input ---------------------------------------------------
-    #region human input
-
-    private void ActivateButton(bool on)
-    {
-        rollDiceButton.SetActive(on);
-    }
-
-    public void DeactivateSelectors()
-    {
-        foreach(var player in playerList)
-        {
-            foreach(var stone in player.stones)
-            {
-                stone.SetSelector(false);
-            }
-        }
-    }
-
-    // Gets called when roll-dice button is clicked
-    public void HumanRoll()
-    {
-        ActivateButton(false);
-        dice.RollDice();
-    }
-
-    public void HumanDiceRoll()
-    {
-        // Moveable stone list
-        var moveableStones = PossibleStones(rolledHumanDice);
-
-        // Start node full check
-        bool startNodeFull = false;
-
-        //Loop through all the active players stones and check if one of his stones is on the start position
-        foreach (var stone in playerList[activePlayer].stones)
-        {
-            if (stone.currentNode == stone.StartNode)
-            {
-                startNodeFull = true;
-                break;
-            }
-        }
-
-        // Number == 6 && start node is not full, add stones inside base to moveable stone list too
-        if(rolledHumanDice == 6 && !startNodeFull)
-        {
-            foreach (var stone in playerList[activePlayer].stones)
-            {
-                if (!stone.ReturnIsOut())
-                {
-                    moveableStones.Add(stone);
-                }
-            }
-        }
-
-        // Activate all possible selectors
-        foreach(var stone in moveableStones)
-        {
-            stone.SetSelector(true);
-        }
-
-        // If no moves are possible, switch player
-        if(moveableStones.Count == 0)
-        {
-            state = States.SWITCH_PLAYER;
-        }
-    }
-
-    private List<Stone> PossibleStones(int rolledDice)
-    {
-        List<Stone> tempList = new();
-
-        foreach (var stone in playerList[activePlayer].stones)
-        {
-            if (stone.ReturnIsOut())
-            {
-                // Check for possible kick
-                if (stone.CheckPossibleKick(stone.stoneID, rolledDice))
-                {
-                    tempList.Add(stone);
-                    continue;
-                }
-
-                // Check for possible move
-                if (stone.CheckPossibleMove(rolledDice))
-                {
-                    tempList.Add(stone);
-                }
-            }
-        }
-
-        return tempList;
-    }
-
-    #endregion
 }

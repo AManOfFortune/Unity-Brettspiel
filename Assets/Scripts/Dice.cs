@@ -6,8 +6,8 @@ public class Dice : MonoBehaviour
 {
     private Rigidbody rb;
 
-    private bool hasLanded;
-    private bool thrown;
+    private bool hasLanded = false;
+    private bool thrown = false;
 
     Vector3 initialPosition;
 
@@ -26,6 +26,8 @@ public class Dice : MonoBehaviour
     public void RollDice()
     {
         ResetDice();
+
+        UIManager.Instance.RollDiceButtonVisible(false);
 
         if(!thrown && !hasLanded)
         {
@@ -89,7 +91,7 @@ public class Dice : MonoBehaviour
                 diceValue = side.sideValue;
 
                 // Send result to game manager
-                GameManager.instance.RollDice(diceValue);
+                GameManager.Instance.ReportDiceRollResults(diceValue);
             }
         }
     }

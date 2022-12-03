@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Route : MonoBehaviour
 {
-    public List<Transform> childNodeList = new();
+    public List<Transform> ChildNodeList = new();
 
     // Start is called before the first frame update
     void Start()
@@ -18,11 +16,11 @@ public class Route : MonoBehaviour
         Gizmos.color = Color.green;
         FillNodes();
 
-        for (int i = 1; i < childNodeList.Count; i++)
+        for (int i = 1; i < ChildNodeList.Count; i++)
         {
-            var currentPosition = childNodeList[i].position;
+            var currentPosition = ChildNodeList[i].position;
 
-            var previousNodePosition = childNodeList[i - 1].position;
+            var previousNodePosition = ChildNodeList[i - 1].position;
 
             Gizmos.DrawLine(previousNodePosition, currentPosition);
         }
@@ -30,7 +28,7 @@ public class Route : MonoBehaviour
 
     private void FillNodes()
     {
-        childNodeList.Clear();
+        ChildNodeList.Clear();
 
         var childNodes = GetComponentsInChildren<Transform>();
 
@@ -38,13 +36,8 @@ public class Route : MonoBehaviour
         {
             if(child != transform) // Makes sure that route game object is not part of child node list
             {
-                childNodeList.Add(child);
+                ChildNodeList.Add(child);
             }
         }
-    }
-
-    public int GetIndexOfPosition(Transform nodeTransform)
-    {
-        return childNodeList.IndexOf(nodeTransform);
     }
 }

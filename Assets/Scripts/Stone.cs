@@ -1,220 +1,78 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Timeline;
 using UnityEngine;
 
 public class Stone : MonoBehaviour
 {
-    public int stoneID;
+    [NonSerialized] public Node BaseNode;
+    [NonSerialized] public Node CurrentPosition = null;
 
-    [Header("Routes")]
-    public Route CommonRoute; // Outer route
-    public Route InnerRoute;
+    [NonSerialized] public Player Owner; // Owner knows the routes & other player information
 
-    [SerializeField] private List<Node> fullRoute = new();
+    private int RoutePosition = 0; // Index position of stone in full route
 
-    [Header("Nodes")]
-    public Node StartNode; // Node that player starts the route on
+    private float cTime; // Used in movement function math
 
-    public Node baseNode; // Node in home base
-    public Node currentNode;
-    public Node goalNode;
+    private GameObject Selector;
 
-    private int routePosition; // Index in full Route of current position
-    private int startNodeIndex; // Index in the common route of the starting node
-
-    private int steps; // Rolled dice amount (number of steps we want to walk)
-    private int doneSteps = 0; // Steps completed
-
-    [Header("Bools")]
-    public bool isOut;
-    private bool isMoving = false;
-
-    private bool hasTurn; // Is for human input
-
-    [Header("Selector")]
-    public GameObject selector;
-
-    // Arc movement
-    private float amplitude = 0.5f;
-    private float cTime = 0;
-
-
-    private void Start()
+    private void Awake()
     {
-        startNodeIndex = CommonRoute.GetIndexOfPosition(StartNode.gameObject.transform);
-
-        CreateFullRoute();
-
-        SetSelector(false);
+        // Gets the selector and makes it invisible by default
+        Selector = transform.GetChild(0).transform.gameObject;
+        ShowSelector(false);
     }
 
-    // Fills full route list
-    private void CreateFullRoute()
+    private void OnMouseDown()
     {
-        // Adds common route to full route, starts at starting postion
-        for (int i = 0; i < CommonRoute.childNodeList.Count; i++)
+        // If selector is active
+        if (Selector.activeSelf)
         {
-            int tempPos = startNodeIndex + i;
-            tempPos %= CommonRoute.childNodeList.Count;
-
-            fullRoute.Add(CommonRoute.childNodeList[tempPos].GetComponent<Node>());
-        }
-
-        // Adds inner route at the end of full route
-        for (int i = 0; i < InnerRoute.childNodeList.Count; i++)
-        {
-            fullRoute.Add(InnerRoute.childNodeList[i].GetComponent<Node>());
+            // Move the stone
+            Move();
+            // Deactivate all selectors
+            Owner.DeactivateAllSelectors();
         }
     }
 
-    private IEnumerator Move(int rolledDice) // Coroutine to move player all his steps
+    // Sets transform and rotation to target
+    // Currently only used when spawning a stone
+    public void SetTransformTo(Transform target)
     {
-        if(isMoving) yield break;
+        gameObject.transform.position = target.position;
+        gameObject.transform.rotation = target.rotation;
+    }
 
-        isMoving = true;
+    public bool IsInBase()
+    {
+        return CurrentPosition == null;
+    }
 
-        while(steps > 0)
+    public void ShowSelector(bool show)
+    {
+        Selector.SetActive(show);
+    }
+
+    // Checks if a regular move is possible for this stone
+    public bool RegularMovePossible(int stepsToMove)
+    {
+        int tempPos = RoutePosition + stepsToMove;
+
+        if (tempPos >= Owner.FullRoute.Count) return false; // If new route position would be over the end of the route, return false
+
+        return !Owner.FullRoute[tempPos].isTaken;
+    }
+
+    // Checks if this stone can move and kick another stone out
+    public bool KickMovePossible(int stepsToMove)
+    {
+        int tempPos = RoutePosition + stepsToMove;
+
+        if (tempPos >= Owner.FullRoute.Count) return false;
+
+        // If the position is taken, check if stone belongs to the same player
+        if (Owner.FullRoute[tempPos].isTaken)
         {
-            routePosition++;
-
-            var nextPos = fullRoute[routePosition].gameObject.transform.position;
-            var startPos = fullRoute[routePosition - 1].gameObject.transform.position;
-
-            while(MoveInArcToNextNode(startPos, nextPos, 5f)) { yield return null; }
-
-            yield return new WaitForSeconds(0.1f);
-
-            cTime = 0;
-            steps--;
-            doneSteps++;
-        }
-
-        goalNode = fullRoute[routePosition];
-
-        // Check possible kick
-        if(goalNode.isTaken)
-        {
-            // Kick the other stone
-            goalNode.stone.ReturnToBase();
-        }
-
-        // Clean current node
-        currentNode.stone = null;
-        currentNode.isTaken = false;
-
-        // Set up next node
-        goalNode.stone = this;
-        goalNode.isTaken = true;
-
-        // Set current to next node
-        currentNode = goalNode;
-        goalNode = null;
-
-        // Report to game manager
-        // Check if player won
-        if(WinCondition())
-        {
-            GameManager.instance.ReportWinning();
-        }
-
-        // Roll dice again if a 6 was rolled
-        if (rolledDice == 6) GameManager.instance.state = GameManager.States.ROLL_DICE;
-        // Switch the player otherwise
-        else GameManager.instance.state = GameManager.States.SWITCH_PLAYER;
-
-        isMoving = false;
-    }
-
-    private IEnumerator MoveOutOfBase() // Coroutine to move player out of base
-    {
-        if (isMoving) yield break;
-
-        isMoving = true;
-
-        while (steps > 0)
-        {
-
-            var nextPos = fullRoute[routePosition].gameObject.transform.position;
-            var startPos = baseNode.gameObject.transform.position;
-
-            while (MoveInArcToNextNode(startPos, nextPos, 4f)) { yield return null; }
-
-            yield return new WaitForSeconds(0.1f);
-
-            cTime = 0;
-            steps--;
-            doneSteps++;
-        }
-
-        // Update node
-        goalNode = fullRoute[routePosition];
-        
-        // Check if we kick another stone
-        if(goalNode.isTaken)
-        {
-            goalNode.stone.ReturnToBase();
-        }
-
-        goalNode.stone = this;
-        goalNode.isTaken = true;
-
-        currentNode = goalNode;
-        goalNode = null;
-
-        // Report back to game manager
-        GameManager.instance.state = GameManager.States.ROLL_DICE;
-
-        isMoving = false;
-    }
-
-    bool MovingToNextNode(Vector3 goalPos, float speed)
-    {
-        return goalPos != (transform.position = Vector3.MoveTowards(transform.position, goalPos, speed * Time.deltaTime));
-    }
-
-    bool MoveInArcToNextNode(Vector3 startPos, Vector3 goalPos, float speed)
-    {
-        cTime += speed * Time.deltaTime;
-        var myPosition = Vector3.Lerp(startPos, goalPos, cTime);
-
-        myPosition.y += amplitude * Mathf.Sin(Mathf.Clamp01(cTime) * Mathf.PI);
-
-        return goalPos != (transform.position = Vector3.Lerp(transform.position, myPosition, cTime));
-    }
-
-    public bool ReturnIsOut()
-    {
-        return isOut;
-    }
-
-    public void LeaveBase()
-    {
-        steps = 1; // Move once inside MoveOutOfBase() function
-        isOut = true;
-        routePosition = 0;
-
-        StartCoroutine(MoveOutOfBase());
-    }
-
-    public bool CheckPossibleMove(int rolledDice)
-    {
-        int tempPos = routePosition + rolledDice;
-
-        if (tempPos >= fullRoute.Count) return false;
-
-        return !fullRoute[tempPos].isTaken;
-    }
-
-    public bool CheckPossibleKick(int stoneID, int rolledDice)
-    {
-        int tempPos = routePosition + rolledDice;
-
-        if (tempPos >= fullRoute.Count) return false;
-
-        if (fullRoute[tempPos].isTaken)
-        {
-            if (stoneID == fullRoute[tempPos].stone.stoneID)
+            if (Owner == Owner.FullRoute[tempPos].stone.Owner)
             {
                 return false;
             }
@@ -225,72 +83,142 @@ public class Stone : MonoBehaviour
         return false;
     }
 
-    public void StartMove(int rolledDice)
+    // Moves a stone, either regularly or out of the base if it is in the base
+    // Make sure that this function is only called after making sure the move is possible/valid
+    public void Move()
     {
-        steps = rolledDice;
-        StartCoroutine(Move(rolledDice));
-    }
-
-    public void ReturnToBase()
-    {
-        StartCoroutine(Return());
-    }
-
-    private IEnumerator Return()
-    {
-        GameManager.instance.ReportTurnPossible(false);
-
-        routePosition = 0;
-        currentNode = null;
-        goalNode = null;
-        isOut = false;
-        doneSteps = 0;
-
-        var baseNodePos = baseNode.gameObject.transform.position;
-
-        while(MovingToNextNode(baseNodePos, 8f)) { yield return null; }
-
-        GameManager.instance.ReportTurnPossible(true);
-    }
-
-    private bool WinCondition()
-    {
-        foreach(var nodeTransform in InnerRoute.childNodeList)
+        if(IsInBase())
         {
-            if(!nodeTransform.GetComponent<Node>().isTaken)
-            {
-                return false;
-            }
+            StartCoroutine(LeaveBase(true));
         }
-
-        return true;
-    }
-
-    #region human input
-
-    public void SetSelector(bool active)
-    {
-        selector.SetActive(active);
-        // This is for having the click ability
-        hasTurn = active;
-    }
-
-    private void OnMouseDown()
-    {
-        if(hasTurn)
+        else
         {
-            if(!isOut)
-            {
-                LeaveBase();
-            }
-            else
-            {
-                StartMove(GameManager.instance.rolledHumanDice);
-            }
-
-            GameManager.instance.DeactivateSelectors();
+            StartCoroutine(MoveSteps());
         }
     }
 
-    #endregion
+    // Enumerator for regular board movement
+    // Takes care of "cleaning" node, kicking stones and checking for win too
+    private IEnumerator MoveSteps()
+    {
+        if (StateMachine.Instance.SomethingIsHappening) yield break;
+
+        StateMachine.Instance.SomethingIsHappening = true;
+
+        // Move stone visually
+        while (Owner.StepsToMove > 0)
+        {
+            RoutePosition++;
+
+            var nextPos = Owner.FullRoute[RoutePosition].gameObject.transform;
+
+            while (MoveInArcTo(nextPos)) { yield return null; }
+
+            yield return new WaitForSeconds(0.1f);
+
+            cTime = 0;
+            Owner.StepsToMove--;
+        }
+
+        Node newPosition = Owner.FullRoute[RoutePosition];
+
+        // Kick stone on new position if there is one
+        if(KickMovePossible(0))
+        {
+            newPosition.stone.LeaveBase(false);
+        }
+
+        // Clean current node
+        CurrentPosition.stone = null;
+        CurrentPosition.isTaken = false;
+
+        // Set up next node
+        newPosition.stone = this;
+        newPosition.isTaken = true;
+
+        // Set current position to new position
+        CurrentPosition = newPosition;
+
+        // Check if the player has won
+        // This can only happen after moving, so that's why this is called (only) here
+        Owner.CheckIfHasWon();
+
+        StateMachine.Instance.State = StateMachine.States.SWITCH_PLAYER;
+
+        StateMachine.Instance.SomethingIsHappening = false;
+    }
+
+    // Enumerator for leaving or returning to base
+    private IEnumerator LeaveBase(bool leave)
+    {
+        if (StateMachine.Instance.SomethingIsHappening) yield break;
+
+        StateMachine.Instance.SomethingIsHappening = true;
+
+        // Leaving the base
+        if(leave)
+        {
+            var nextPos = Owner.StartNode.gameObject.transform;
+
+            while (MoveInArcTo(nextPos)) { yield return null; }
+
+            yield return new WaitForSeconds(0.1f);
+
+            cTime = 0;
+
+            Node newPosition = Owner.FullRoute[RoutePosition]; // Should be the same as StartNode
+
+            // Kick stone on new position if there is one
+            if (KickMovePossible(0))
+            {
+                newPosition.stone.LeaveBase(false);
+            }
+
+            newPosition.stone = this;
+            newPosition.isTaken = true;
+
+            CurrentPosition = newPosition;
+
+            // Roll dice again after leaving the base
+            StateMachine.Instance.State = StateMachine.States.ROLL_DICE;
+        }
+        // Returning to base
+        else
+        {
+            RoutePosition = 0;
+            CurrentPosition = null; // Keep in mind that the only reason we return to base is when another player kicks us, so there is no need to reset current position node values!
+
+            var endPos = BaseNode.gameObject.transform;
+
+            while (MoveInArcTo(endPos)) { yield return null; }
+        }
+
+        // Make sure leaving the base resets the steps to 0 (previously whatever needed to be rolled to leave the base)
+        Owner.StepsToMove = 0;
+
+        StateMachine.Instance.SomethingIsHappening = false;
+    }
+
+    // Helper function to move & rotate to new position (position & rotation)
+    // BUG: Rotation Lerp is often slower than position lerp, resulting in inconsistent movement speed
+    private bool MoveInArcTo(Transform goalPos)
+    {
+        // Increase cTime
+        cTime += GameManager.Instance.MovementSpeed * Time.deltaTime;
+
+        // New horizontal position
+        var myPosition = Vector3.Lerp(transform.position, goalPos.position, cTime);
+
+        // Increase new position height with mafs that I don't understand but that work :)
+        myPosition.y += GameManager.Instance.MovementArcHeight * Mathf.Sin(Mathf.Clamp01(cTime) * Mathf.PI);
+
+        // Rotate towards goal rotation using more dank mafs :)
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(goalPos.eulerAngles), Time.deltaTime * GameManager.Instance.MovementSpeed);
+
+        // Move towards new position
+        transform.position = Vector3.Lerp(transform.position, myPosition, cTime);
+
+        // Returns false as long as movement and rotation is not complete
+        return (goalPos.position != transform.position || transform.rotation != goalPos.rotation);
+    }
 }

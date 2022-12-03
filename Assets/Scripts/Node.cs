@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    public bool isTaken;
+    [NonSerialized] public bool isTaken;
 
-    public Stone stone;
+    [NonSerialized] public Stone stone;
 }
