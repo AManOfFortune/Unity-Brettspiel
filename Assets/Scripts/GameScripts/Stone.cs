@@ -70,13 +70,8 @@ public class Stone : MonoBehaviour
         if (tempPos >= Owner.FullRoute.Count) return false;
 
         // If the position is taken, check if stone belongs to the same player
-        if (Owner.FullRoute[tempPos].isTaken)
+        if (Owner.FullRoute[tempPos].isTaken && Owner != Owner.FullRoute[tempPos].stone.Owner)
         {
-            if (Owner == Owner.FullRoute[tempPos].stone.Owner)
-            {
-                return false;
-            }
-
             return true;
         }
 
