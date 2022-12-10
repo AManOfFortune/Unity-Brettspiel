@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Vertex : MonoBehaviour
+public class Vertex : Node
 {
     public bool AddedToList = false;
     public GameObject[] adjacentVertices;
