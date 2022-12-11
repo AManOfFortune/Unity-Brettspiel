@@ -70,13 +70,8 @@ public class Stone : MonoBehaviour
         if (tempPos >= Owner.FullRoute.Count) return false;
 
         // If the position is taken, check if stone belongs to the same player
-        if (Owner.FullRoute[tempPos].isTaken)
+        if (Owner.FullRoute[tempPos].isTaken && Owner != Owner.FullRoute[tempPos].stone.Owner)
         {
-            if (Owner == Owner.FullRoute[tempPos].stone.Owner)
-            {
-                return false;
-            }
-
             return true;
         }
 
@@ -93,31 +88,51 @@ public class Stone : MonoBehaviour
         }
         else
         {
-            StartCoroutine(MoveSteps());
+            StartCoroutine(MoveSteps(Owner.StepsToMove));
+            Owner.StepsToMove = 0;
         }
+    }
+
+    public void MoveStone(int steps)
+    {
+        StartCoroutine(MoveSteps(steps));
     }
 
     // Enumerator for regular board movement
     // Takes care of "cleaning" node, kicking stones and checking for win too
-    private IEnumerator MoveSteps()
+    private IEnumerator MoveSteps(int steps)
     {
         if (StateMachine.Instance.SomethingIsHappening) yield break;
 
         StateMachine.Instance.SomethingIsHappening = true;
-
+        int forward = 1;
+        if (steps < 0) forward = -1;
         // Move stone visually
-        while (Owner.StepsToMove > 0)
+        while (steps * forward > 0)
         {
-            RoutePosition++;
+            RoutePosition += forward;
 
-            var nextPos = Owner.FullRoute[RoutePosition].gameObject.transform;
+            Node nextNode = Owner.FullRoute[RoutePosition];
+            var nextPos = nextNode.gameObject.transform;
 
             while (MoveInArcTo(nextPos)) { yield return null; }
 
             yield return new WaitForSeconds(0.1f);
 
+            switch (nextNode.gameObject.tag)
+            {
+                case "Slipperyfield":
+                    nextNode.performActions(this);
+                    break;
+                case "Stickyfield":
+                    steps -= forward;
+                    nextNode.performActions(this);
+                    break;
+                default:
+                    steps -= forward;
+                    break;
+            }
             cTime = 0;
-            Owner.StepsToMove--;
         }
 
         Node newPosition = Owner.FullRoute[RoutePosition];
@@ -142,6 +157,11 @@ public class Stone : MonoBehaviour
         // Check if the player has won
         // This can only happen after moving, so that's why this is called (only) here
         Owner.CheckIfHasWon();
+
+        if(CurrentPosition.gameObject.tag == "Actionfield")
+        {
+            CurrentPosition.performActions(this);
+        }
 
         StateMachine.Instance.State = StateMachine.States.SWITCH_PLAYER;
 

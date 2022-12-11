@@ -159,27 +159,32 @@ public class Player : MonoBehaviour
         if(canLeaveBase)
         {
             moveableStones = GetMoveableStonesInBase();
+            if(moveableStones.Count == 0)
+            {
+                canLeaveBase = false;
+            }
         }
         
         // If we cannot leave the base, or no stone that can leave the base was found, look for stones that are already out
-        if(!canLeaveBase || moveableStones.Count == 0)
+        if(!canLeaveBase)
         {
             foreach (Stone stone in Stones)
             {
-                if (!stone.IsInBase())
+                if (stone.IsInBase())
                 {
-                    // If we find a stone that can kick another stone, basically return it as the best stone
-                    if (stone.KickMovePossible(steps))
-                    {
-                        moveableStones.Clear();
-                        moveableStones.Add(stone);
-                        break;
-                    }
-                    // If a kick is not possible, check if a regular move is possible
-                    else if (stone.RegularMovePossible(steps))
-                    {
-                        moveableStones.Add(stone);
-                    }
+                    continue;
+                }
+                // If we find a stone that can kick another stone, basically return it as the best stone
+                if (stone.KickMovePossible(steps))
+                {
+                    moveableStones.Clear();
+                    moveableStones.Add(stone);
+                    break;
+                }
+                // If a kick is not possible, check if a regular move is possible
+                else if (stone.RegularMovePossible(steps))
+                {
+                    moveableStones.Add(stone);
                 }
             }
         }
@@ -202,13 +207,9 @@ public class Player : MonoBehaviour
             {
                 moveableStones.Clear();
                 break;
-            }
-
-            if (stone.IsInBase())
-            {
-
-            }
+            } else { 
                 moveableStones.Add(stone);
+            }
         }
 
         return moveableStones;
@@ -220,8 +221,13 @@ public class Player : MonoBehaviour
 
         foreach(Stone stone in Stones)
         {
-            // If stone is not in base, and stone can move (regular move possible or a kick move possible), add it to list
-            if(!stone.IsInBase() && (stone.RegularMovePossible(steps) || stone.KickMovePossible(steps)))
+            // If stone is not in base,
+            if (stone.IsInBase())
+            {
+                continue;
+            }
+            // and stone can move (regular move possible or a kick move possible), add it to list
+            if (stone.RegularMovePossible(steps) || stone.KickMovePossible(steps))
             {
                 moveableStones.Add(stone);
             }
