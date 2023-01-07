@@ -16,13 +16,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Dice GameDice;
     [SerializeField] private CameraController CameraController;
 
-    [SerializeField] private List<Player> Players = new();
+    [SerializeField] private List<Player> Players;
     private int ActivePlayer; // Index of currently playing player in player list
+
+    public GameObject DiceArena;
 
     private void Awake()
     {
         // Fills player list
-        Players = new(FindObjectsOfType<Player>());
+        Players = new List<Player>(FindObjectsOfType<Player>());
 
         Instance = this;
     }
@@ -55,7 +57,7 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(DelayBySeconds(delayBySeconds, () =>
         {
-            if(GetActivePlayer().Type == Player.PlayerTypes.HUMAN) CameraController.MoveToDiceArena(); // Zoom camera to dice arena if player is human
+            //if(GetActivePlayer().Type == Player.PlayerTypes.HUMAN) CameraController.LookAt(new Vector3(-7,0,50)); // Zoom camera to dice arena if player is human
 
             GameDice.RollDice();
         }));
@@ -94,7 +96,7 @@ public class GameManager : MonoBehaviour
     // Once physical dice roll is done, this function gets called with the results
     public void ReportDiceRollResults(int diceRollResult)
     {
-        if (GetActivePlayer().Type == Player.PlayerTypes.HUMAN) CameraController.ResetPosition(); // Move zoomed camera back if player is human
+        //if (GetActivePlayer().Type == Player.PlayerTypes.HUMAN) CameraController.ResetPosition(); // Move zoomed camera back if player is human
 
         UIManager.Instance.ShowMessage(GetActivePlayer().Name + " has rolled " + diceRollResult);
 
