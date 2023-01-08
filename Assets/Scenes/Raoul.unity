@@ -10417,11 +10417,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6291655985321599453, guid: dd2c109889c16844e93f61d7a222ae56, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.904823
+      value: 9.9
       objectReference: {fileID: 0}
     - target: {fileID: 6291655985321599453, guid: dd2c109889c16844e93f61d7a222ae56, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 19.723318
+      value: 19.91
       objectReference: {fileID: 0}
     - target: {fileID: 6291655985321599453, guid: dd2c109889c16844e93f61d7a222ae56, type: 3}
       propertyPath: m_LocalRotation.w
@@ -10451,6 +10451,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6518681972467185908, guid: dd2c109889c16844e93f61d7a222ae56, type: 3}
+      propertyPath: adjacentVertices.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518681972467185908, guid: dd2c109889c16844e93f61d7a222ae56, type: 3}
+      propertyPath: adjacentVertices.Array.data[0]
+      value: 
+      objectReference: {fileID: 1868480712}
     - target: {fileID: 6637078126503246695, guid: dd2c109889c16844e93f61d7a222ae56, type: 3}
       propertyPath: m_Name
       value: Vertex (4)
@@ -11109,7 +11117,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1914865714}
-  - component: {fileID: 1914865713}
   m_Layer: 0
   m_Name: ListOfVertices
   m_TagString: Untagged
@@ -11117,24 +11124,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1914865713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1914865712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b440a398bdd3a9443a73d2ae27b4753d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vertices:
-  - {fileID: 999521191}
-  - {fileID: 406432284}
-  - {fileID: 998691545}
-  - {fileID: 1868480712}
-  - {fileID: 406432284}
 --- !u!4 &1914865714
 Transform:
   m_ObjectHideFlags: 0
