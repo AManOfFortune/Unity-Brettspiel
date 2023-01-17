@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     public float MovementArcHeight = 0.5f;
 
     public Route CommonRoute;
+    public GameObject SelectorMaterial;
     [SerializeField] private Dice GameDice;
     [SerializeField] private CameraController CameraController;
 
@@ -35,6 +37,8 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {   
         InitializePlayers(); // Initializes the players
+
+        InitializeRoutes(); // Initializes the common route
 
         UIManager.Instance.RollDiceButtonVisible(false); // Makes sure the roll dice button is hidden
 
@@ -102,7 +106,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(DelayBySeconds(2, () =>
         {
             // Move with the result and the condition for leaving the base is called
-            GetActivePlayer().Move(diceRollResult, diceRollResult > 0);
+            GetActivePlayer().ChooseMove(diceRollResult, diceRollResult > 0);
         }));
     }
 
@@ -112,8 +116,39 @@ public class GameManager : MonoBehaviour
         {
             player.Type = GameSettings.PlayerNamesAndTypes.ContainsKey(player.Name) ? GameSettings.PlayerNamesAndTypes[player.Name] : Player.PlayerTypes.NPC; // Sets the player type to what was set in main menu, or to default NPC
             player.SpawnStones(); // Spawns all player stones on their respective base
-            player.CreateFullRoute(); // Creates the full route list
+            player.InitializeGoalRoute(); // Creates adjacency list for goal route
         }
+    }
+
+    private void InitializeRoutes()
+    {
+        // Loop common route entries
+        for (int i = 0; i < CommonRoute.ChildNodeList.Count; i++)
+        {
+            var node = CommonRoute.ChildNodeList[i].GetComponent<Node>();
+
+            var nextNode = 
+            i != CommonRoute.ChildNodeList.Count - 1 ? // If the loop reaches the last entry, the last node gets joined to the first one so we create a loop
+            CommonRoute.ChildNodeList[i + 1].GetComponent<Node>() : 
+            CommonRoute.ChildNodeList[0].GetComponent<Node>();
+
+            node.AdjacentNodes.Add(nextNode);
+        }
+
+        /// SCUFFED SELECTOR CODE HERE
+        /// FUCKING REMOVE THAT SHIT ASAP
+
+        var allNodes = FindObjectsOfType<Node>();
+        foreach (var node in allNodes)
+        {
+            node.selector = SelectorMaterial;
+
+            Instantiate(node.selector, node.transform);
+            node.selector.SetActive(false);
+        }
+
+        /// END OF SCUFFED SELECTOR CODE
+
     }
 
     private bool CheckIsGameover()

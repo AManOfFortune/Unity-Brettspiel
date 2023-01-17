@@ -6,14 +6,31 @@ using UnityEngine;
 public class Node : MonoBehaviour
 {
     public List<Actionfield> Actions = new List<Actionfield>();
-    
-    [NonSerialized] public bool isTaken;
 
+    public List<Node> AdjacentNodes;
+
+    [NonSerialized] public bool isTaken;
     [NonSerialized] public Stone stone;
+    [NonSerialized] public GameObject selector;
 
     private void Start()
     {
         UpdateNode();
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Store the position of the current vertex
+        var currentPos = this.transform.position;
+
+        foreach (var adjacentVertex in AdjacentNodes)
+        {
+            // Store the direction of the adjacent vertex
+            var adjacentVertexDir = adjacentVertex.gameObject.transform.position;
+            // Draw an arrow from the current vertex in the direction of the adjacent vertex
+            DrawArrow.ForGizmo(currentPos, adjacentVertexDir - currentPos, Color.green);
+
+        }
     }
 
     private void UpdateNode()
@@ -32,6 +49,7 @@ public class Node : MonoBehaviour
             default: gameObject.tag = "Defaultfield"; break;
         }
     }
+
     public void performActions(Stone Piece)
     {
         Debug.Log("Performing " + Actions.Count + " Actions");
