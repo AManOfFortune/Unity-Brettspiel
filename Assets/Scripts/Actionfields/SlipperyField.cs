@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Debugfield : Actionfield
+public class SlipperyField : Actionfield
 {
     public override void PerformAction(Stone Piece)
     {
@@ -11,6 +11,6 @@ public class Debugfield : Actionfield
 
     public override void ChangeVisuals(GameObject Node)
     {
-        Debug.Log("Debug-field doesnt have any Visuals");
+        transform.localScale = new Vector3(1f, 1.5f, 1f);
     }
 }

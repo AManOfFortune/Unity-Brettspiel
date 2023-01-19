@@ -84,6 +84,8 @@ public class Player : MonoBehaviour
             {
                 stone.ShowSelector(true);
             }
+
+            UIManager.Instance.ShowMessage("Select stone to move");
         }
         // If player is NPC, find "best" stone to move and move it
         else if (Type == PlayerTypes.NPC)
@@ -165,20 +167,16 @@ public class Player : MonoBehaviour
                 {
                     continue;
                 }
-                Debug.Log("Movement check kick");
                 // If we find a stone that can kick another stone, basically return it as the best stone
                 if (stone.KickMovePossible(steps))
                 {
-                    Debug.Log("Kick move found");
                     moveableStones.Clear();
                     moveableStones.Add(stone);
                     break;
                 }
-                Debug.Log("Movement check regular");
                 // If a kick is not possible, check if a regular move is possible
                 if (stone.RegularMovePossible(steps))
                 {
-                    Debug.Log("Regular move found");
                     moveableStones.Add(stone);
                 }
             }

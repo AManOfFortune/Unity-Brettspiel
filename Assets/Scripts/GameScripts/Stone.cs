@@ -116,25 +116,60 @@ public class Stone : MonoBehaviour
 
         StateMachine.Instance.SomethingIsHappening = true;
 
-        int forward = 1;
-        if (steps < 0) forward = -1;
-
         // Clean current node (-> Old position)
         CurrentPosition.stone = null;
         CurrentPosition.isTaken = false;
 
         // Move stone visually (-> Change the node transform and save new node position as our current one)
-        while (steps * forward > 0)
+        while (steps > 0)
         {
-            Node nextNode;
-            // TODO: Very inefficient, definitely improvable so the entire function is not called again and again
-            do
-            {
-                nextNode = DetermineNextNode(steps, CurrentPosition);
-                yield return null;
-            } while (nextNode == null);
+            var nextNodeList = DetermineNextNode(steps, CurrentPosition);
 
-            CurrentPosition = nextNode;
+            if (nextNodeList.Count > 1)
+            {
+                UIManager.Instance.ShowMessage("Choose Path with Q and E, confirm with SPACE");
+
+                int chosenNodeIndex = 0;
+
+                nextNodeList[chosenNodeIndex].ActivateSelector(true);
+
+                while (!Input.GetKeyDown(KeyCode.Space))
+                {
+                    // Cycle left through the adjacent nodes
+                    if (Input.GetKeyDown(KeyCode.Q))
+                    {
+                        // Hide selector before changing node
+                        nextNodeList[chosenNodeIndex].ActivateSelector(false);
+
+                        chosenNodeIndex = Modulo(chosenNodeIndex - 1, nextNodeList.Count);
+
+                        // Show the new selector
+                        nextNodeList[chosenNodeIndex].ActivateSelector(true);
+                    }
+
+                    // Cycle right through the adjacent nodes
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        // Hide selector before changing node
+                        nextNodeList[chosenNodeIndex].ActivateSelector(false);
+
+                        chosenNodeIndex = Modulo(chosenNodeIndex + 1, nextNodeList.Count);
+
+                        // Show the new selector
+                        nextNodeList[chosenNodeIndex].ActivateSelector(true);
+                    }
+
+                    yield return null;
+                }
+
+                // Hide the selector of the chosen node
+                nextNodeList[chosenNodeIndex].ActivateSelector(false);
+                CurrentPosition = nextNodeList[chosenNodeIndex];
+            }
+            else
+            {
+                CurrentPosition = nextNodeList[0];
+            }
 
             var nextPos = CurrentPosition.gameObject.transform;
 
@@ -148,11 +183,11 @@ public class Stone : MonoBehaviour
                     CurrentPosition.performActions(this);
                     break;
                 case "Stickyfield":
-                    steps -= forward;
+                    steps -= 1;
                     CurrentPosition.performActions(this);
                     break;
                 default:
-                    steps -= forward;
+                    steps -= 1;
                     break;
             }
             cTime = 0;
@@ -240,8 +275,6 @@ public class Stone : MonoBehaviour
     {
         List<Node> endPointList = new List<Node>();
 
-        Debug.Log(currentPos);
-
         // Do actions for the node type
         switch (currentPos.gameObject.tag)
         {
@@ -324,8 +357,8 @@ public class Stone : MonoBehaviour
 
     // Determines the next node to a given position, either automatically or by choosing a path
     // Also makes sure the path options are all valid (e.g. at the end of the chosen path won't be a stone of the same player, ...)
-    [CanBeNull]
-    private Node DetermineNextNode(int steps, Node currentPos)
+    // Returns a list that is of length 1. If the list is longer, it means the human player is required to select a node
+    private List<Node> DetermineNextNode(int steps, Node currentPos)
     {
         // Get adjacent node list
         // Should always have at least 1 entry since this function should never get called on the final goal position (which is the only node without an adjacent one)
@@ -346,54 +379,7 @@ public class Stone : MonoBehaviour
                 // If the player is a human, the next node is chosen by player
                 if (Owner.Type == Player.PlayerTypes.HUMAN)
                 {
-                    // If one of the nodes is already selected, change the chosen node index
-                    for (var i = 0; i < adjacentNodes.Count; i++)
-                    {
-                        if (adjacentNodes[i].selector.activeSelf)
-                        {
-                            chosenNodeIndex = i;
-                            break;
-                        }
-                    }
-
-                    // Show the highlighting of the node
-                    adjacentNodes[chosenNodeIndex].selector.SetActive(true);
-
-                    UIManager.Instance.ShowMessage("Choose Path with \"A\" <> \"D\" and confirm with SPACE");
-
-                    // If the user does not press the space key ("enter" his choice), check if he pressed A or D
-                    if (!Input.GetKeyDown(KeyCode.Space))
-                    {
-                        // Cycle left through the adjacent nodes
-                        if (Input.GetKeyDown(KeyCode.A))
-                        {
-                            // Hide selector before changing node
-                            adjacentNodes[chosenNodeIndex].selector.SetActive(false);
-
-                            chosenNodeIndex = Modulo(chosenNodeIndex - 1, adjacentNodes.Count);
-
-                            // Show the new selector
-                            adjacentNodes[chosenNodeIndex].selector.SetActive(true);
-                        }
-
-                        // Cycle right through the adjacent nodes
-                        if (Input.GetKeyDown(KeyCode.D))
-                        {
-                            // Hide selector before changing node
-                            adjacentNodes[chosenNodeIndex].selector.SetActive(false);
-
-                            chosenNodeIndex = Modulo(chosenNodeIndex + 1, adjacentNodes.Count);
-
-                            // Show the new selector
-                            adjacentNodes[chosenNodeIndex].selector.SetActive(true);
-                        }
-
-                        // Return null, so this function continues to get called by the co-routine
-                        return null;
-                    }
-
-                    // Hide the selector of the chosen node
-                    adjacentNodes[chosenNodeIndex].selector.SetActive(false);
+                    return adjacentNodes;
                 }
                 // Otherwise the next node is chosen at random
                 // TODO: Make the AI more intelligent by choosing the most optimal path
@@ -404,7 +390,7 @@ public class Stone : MonoBehaviour
             }
         }
 
-        return adjacentNodes[chosenNodeIndex];
+        return new List<Node> { adjacentNodes[chosenNodeIndex] };
     }
 
     private List<Node> GetNextNodesList(Node currentPos)

@@ -35,28 +35,38 @@ public class Node : MonoBehaviour
 
     private void UpdateNode()
     {
-        switch (gameObject.tag)
+        foreach (var Action in Actions)
         {
-            case "Slipperyfield":
-                transform.localScale = new Vector3(1f, 1.5f, 1f);
-                break;
-            case "Stickyfield":
-                break;
-            case "Actionfield":
-                break;
-            case "Defaultfield":
-                break;
-            default: gameObject.tag = "Defaultfield"; break;
+            Action.ChangeVisuals(this.gameObject);
         }
+
+        //switch (gameObject.tag)
+        //{
+        //    case "Slipperyfield":
+        //        transform.localScale = new Vector3(1f, 1.5f, 1f);
+        //        break;
+        //    case "Stickyfield":
+        //        break;
+        //    case "Actionfield":
+        //        break;
+        //    case "Defaultfield":
+        //        break;
+        //    default: gameObject.tag = "Defaultfield"; break;
+        //}
+    }
+
+    public void ActivateSelector(bool state)
+    {
+        selector.gameObject.SetActive(state);
     }
 
     public void performActions(Stone Piece)
     {
         Debug.Log("Performing " + Actions.Count + " Actions");
 
-        foreach (IActionfield Action in Actions)
+        foreach (var Action in Actions)
         {
-            Action.performAction(Piece);
+            Action.PerformAction(Piece);
         }
     }
 }

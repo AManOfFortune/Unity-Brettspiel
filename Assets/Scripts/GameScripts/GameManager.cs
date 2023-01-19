@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public float MovementArcHeight = 0.5f;
 
     public Route CommonRoute;
-    public GameObject SelectorMaterial;
+    public GameObject NodeSelector;
     [SerializeField] private Dice GameDice;
     [SerializeField] private CameraController CameraController;
 
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
         UIManager.Instance.RollDiceButtonVisible(false); // Makes sure the roll dice button is hidden
 
-        ActivePlayer = UnityEngine.Random.Range(0, Players.Count); // Randomize which player starts
+        ActivePlayer = /*UnityEngine.Random.Range(0, Players.Count)*/3; // Randomize which player starts
 
         UIManager.Instance.ShowMessage(Players[ActivePlayer].Name + " starts first!");
 
@@ -117,6 +117,8 @@ public class GameManager : MonoBehaviour
             player.Type = GameSettings.PlayerNamesAndTypes.ContainsKey(player.Name) ? GameSettings.PlayerNamesAndTypes[player.Name] : Player.PlayerTypes.NPC; // Sets the player type to what was set in main menu, or to default NPC
             player.SpawnStones(); // Spawns all player stones on their respective base
             player.InitializeGoalRoute(); // Creates adjacency list for goal route
+
+            if (player.Name == "Yellow") player.Type = Player.PlayerTypes.HUMAN;
         }
     }
 
@@ -141,10 +143,9 @@ public class GameManager : MonoBehaviour
         var allNodes = FindObjectsOfType<Node>();
         foreach (var node in allNodes)
         {
-            node.selector = SelectorMaterial;
-
-            Instantiate(node.selector, node.transform);
-            node.selector.SetActive(false);
+            var selector = Instantiate(NodeSelector, node.transform);
+            node.selector = selector;
+            node.ActivateSelector(false);
         }
 
         /// END OF SCUFFED SELECTOR CODE
