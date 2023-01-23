@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraController : MonoBehaviour
+public class MapCameraController : MonoBehaviour
 {
+    public bool IsActiveCamera;
     private CameraControlActions cameraActions;
     private InputAction movement;
-    private InputAction zoom2;
+    private InputAction zoomKeyboard;
     public Transform cameraTransform;
-    public Camera ActionCamera;
-    public Camera FieldCamera;
 
     //horizontal motion
     [SerializeField]
@@ -60,36 +59,52 @@ public class CameraController : MonoBehaviour
     {
         cameraActions = new CameraControlActions();
         cameraTransform = this.GetComponentInChildren<Camera>().transform;
-    }
 
-    private void OnEnable()
-    {
+
         zoomHeight = cameraTransform.localPosition.y;
         cameraTransform.LookAt(this.transform);
 
         lastPosition = this.transform.position;
+    }
 
-        movement = cameraActions.CameraActionMap.Movement;
-        zoom2 = cameraActions.CameraActionMap.Zoom2;
-        cameraActions.CameraActionMap.Rotate.performed += RotateCamera;
-        cameraActions.CameraActionMap.Zoom.performed += ZoomCamera;
-        cameraActions.CameraActionMap.Enable();
+    private void OnEnable()
+    {
+        movement = cameraActions.CameraMovement.Movement;
+        zoomKeyboard = cameraActions.CameraZooming.ZoomMouse;
+        Enable();
     }
 
     private void OnDisable()
     {
-        cameraActions.CameraActionMap.Rotate.performed -= RotateCamera;
-        cameraActions.CameraActionMap.Zoom.performed -= ZoomCamera;
-        cameraActions.CameraActionMap.Disable();
+        Disable();
+    }
+
+    public void Enable()
+    {
+        cameraActions.CameraRotation.Rotate.performed += RotateCamera;
+        cameraActions.CameraZooming.ZoomKeyboard.performed += ZoomCamera;
+        cameraActions.Enable();
+        IsActiveCamera = true;
+    }
+
+    public void Disable()
+    {
+        cameraActions.CameraRotation.Rotate.performed -= RotateCamera;
+        cameraActions.CameraZooming.ZoomKeyboard.performed -= ZoomCamera;
+        cameraActions.Disable();
+        IsActiveCamera = false;
     }
 
     private void Update()
     {
-        //inputs
-        GetKeyboardMovement();
-        GetKeyboardZoom();
-        CheckMouseAtScreenEdge();
-        DragCamera();
+        if (IsActiveCamera)
+        {
+            //inputs
+            GetKeyboardMovement();
+            GetKeyboardZoom();
+            CheckMouseAtScreenEdge();
+            DragCamera();
+        }
 
         //move base and camera objects
         UpdateVelocity();
@@ -193,7 +208,7 @@ public class CameraController : MonoBehaviour
 
     private void GetKeyboardZoom()
     {
-        float inputValue = zoom2.ReadValue<float>();
+        float inputValue = zoomKeyboard.ReadValue<float>();
         //Debug.Log(inputVector.x + " " + inputVector.y + " " + inputVector.z);
 
         if (Mathf.Abs(inputValue) > 0.1f)

@@ -24,7 +24,7 @@ public partial class @CameraControlActions : IInputActionCollection2, IDisposabl
     ""name"": ""CameraControlActions"",
     ""maps"": [
         {
-            ""name"": ""CameraActionMap"",
+            ""name"": ""CameraMovement"",
             ""id"": ""e30fb7d0-1de9-4cb5-a577-67749545d3e7"",
             ""actions"": [
                 {
@@ -35,42 +35,6 @@ public partial class @CameraControlActions : IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Rotate"",
-                    ""type"": ""Value"",
-                    ""id"": ""4d930956-6c21-4f40-bf53-022a5dcbc50d"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Zoom"",
-                    ""type"": ""Value"",
-                    ""id"": ""19af364e-3d0f-43e7-aa52-f24fd8c7398c"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Swap"",
-                    ""type"": ""Button"",
-                    ""id"": ""918306d7-364d-49a0-a744-b19873e39de4"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Zoom2"",
-                    ""type"": ""Button"",
-                    ""id"": ""ef6069ba-50fb-41ca-a80d-7b012964ebff"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -128,10 +92,145 @@ public partial class @CameraControlActions : IInputActionCollection2, IDisposabl
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                }
+            ]
+        },
+        {
+            ""name"": ""CameraSwapping"",
+            ""id"": ""33d62ca2-ce7c-4eae-bd11-482a6465a883"",
+            ""actions"": [
+                {
+                    ""name"": ""Swap"",
+                    ""type"": ""Button"",
+                    ""id"": ""574012b1-1204-4325-b60c-d49ae6d6fe60"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Tap"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6345dcc9-daca-4ea0-a6e1-4be89f76cc4d"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Swap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""CameraZooming"",
+            ""id"": ""0570a7d2-b332-4c78-97a1-09448a4fe9ac"",
+            ""actions"": [
+                {
+                    ""name"": ""ZoomMouse"",
+                    ""type"": ""Value"",
+                    ""id"": ""8a3395fc-1c32-4923-b5a0-ed6552e8fde1"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ZoomKeyboard"",
+                    ""type"": ""Button"",
+                    ""id"": ""1c3d1d34-b427-49d5-91bf-4e319facf349"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""29b94951-9e9b-4d0c-8890-c609ec0e9bd4"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ZoomMouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""4ebc2a6a-b35d-494c-8c66-3f5e1911ba77"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ZoomKeyboard"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""d30ddf95-8434-4efd-afa4-b2cd331a6153"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ZoomKeyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""9a158f02-8790-46be-9a66-e24248d14d3e"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ZoomKeyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
+        },
+        {
+            ""name"": ""CameraRotation"",
+            ""id"": ""7c35bf4e-b28c-401c-bf65-7a1d06a44006"",
+            ""actions"": [
+                {
+                    ""name"": ""New action"",
+                    ""type"": ""Button"",
+                    ""id"": ""6694ed94-06ab-4ea3-ad39-77c87e11735b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Value"",
+                    ""id"": ""4bc5deca-6f97-467b-9490-2e506345da9c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""51739957-dacb-4bbd-8b8e-0ec4295da97d"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""New action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a621428f-6ae6-4655-8bcb-6e8ed51fc615"",
+                    ""id"": ""6143212f-be2a-4c2a-a124-78bdf1c5e316"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -139,74 +238,26 @@ public partial class @CameraControlActions : IInputActionCollection2, IDisposabl
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e8a94714-d65c-40c4-a9fd-cba38dbd77d3"",
-                    ""path"": ""<Mouse>/scroll"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Zoom"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1d8e6930-1d09-4bf3-8f49-93804da683a7"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Swap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""cb4ace40-f2d5-4f3c-8a2f-eb498fe6e096"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Zoom2"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""5ead2976-70bb-492c-8acb-b2d4687deb59"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Zoom2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""bd19a6af-7806-41b8-bf5f-a7b7f3c11f2d"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Zoom2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 }
             ]
         }
     ],
     ""controlSchemes"": []
 }");
-        // CameraActionMap
-        m_CameraActionMap = asset.FindActionMap("CameraActionMap", throwIfNotFound: true);
-        m_CameraActionMap_Movement = m_CameraActionMap.FindAction("Movement", throwIfNotFound: true);
-        m_CameraActionMap_Rotate = m_CameraActionMap.FindAction("Rotate", throwIfNotFound: true);
-        m_CameraActionMap_Zoom = m_CameraActionMap.FindAction("Zoom", throwIfNotFound: true);
-        m_CameraActionMap_Swap = m_CameraActionMap.FindAction("Swap", throwIfNotFound: true);
-        m_CameraActionMap_Zoom2 = m_CameraActionMap.FindAction("Zoom2", throwIfNotFound: true);
+        // CameraMovement
+        m_CameraMovement = asset.FindActionMap("CameraMovement", throwIfNotFound: true);
+        m_CameraMovement_Movement = m_CameraMovement.FindAction("Movement", throwIfNotFound: true);
+        // CameraSwapping
+        m_CameraSwapping = asset.FindActionMap("CameraSwapping", throwIfNotFound: true);
+        m_CameraSwapping_Swap = m_CameraSwapping.FindAction("Swap", throwIfNotFound: true);
+        // CameraZooming
+        m_CameraZooming = asset.FindActionMap("CameraZooming", throwIfNotFound: true);
+        m_CameraZooming_ZoomMouse = m_CameraZooming.FindAction("ZoomMouse", throwIfNotFound: true);
+        m_CameraZooming_ZoomKeyboard = m_CameraZooming.FindAction("ZoomKeyboard", throwIfNotFound: true);
+        // CameraRotation
+        m_CameraRotation = asset.FindActionMap("CameraRotation", throwIfNotFound: true);
+        m_CameraRotation_Newaction = m_CameraRotation.FindAction("New action", throwIfNotFound: true);
+        m_CameraRotation_Rotate = m_CameraRotation.FindAction("Rotate", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -263,76 +314,169 @@ public partial class @CameraControlActions : IInputActionCollection2, IDisposabl
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // CameraActionMap
-    private readonly InputActionMap m_CameraActionMap;
-    private ICameraActionMapActions m_CameraActionMapActionsCallbackInterface;
-    private readonly InputAction m_CameraActionMap_Movement;
-    private readonly InputAction m_CameraActionMap_Rotate;
-    private readonly InputAction m_CameraActionMap_Zoom;
-    private readonly InputAction m_CameraActionMap_Swap;
-    private readonly InputAction m_CameraActionMap_Zoom2;
-    public struct CameraActionMapActions
+    // CameraMovement
+    private readonly InputActionMap m_CameraMovement;
+    private ICameraMovementActions m_CameraMovementActionsCallbackInterface;
+    private readonly InputAction m_CameraMovement_Movement;
+    public struct CameraMovementActions
     {
         private @CameraControlActions m_Wrapper;
-        public CameraActionMapActions(@CameraControlActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_CameraActionMap_Movement;
-        public InputAction @Rotate => m_Wrapper.m_CameraActionMap_Rotate;
-        public InputAction @Zoom => m_Wrapper.m_CameraActionMap_Zoom;
-        public InputAction @Swap => m_Wrapper.m_CameraActionMap_Swap;
-        public InputAction @Zoom2 => m_Wrapper.m_CameraActionMap_Zoom2;
-        public InputActionMap Get() { return m_Wrapper.m_CameraActionMap; }
+        public CameraMovementActions(@CameraControlActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_CameraMovement_Movement;
+        public InputActionMap Get() { return m_Wrapper.m_CameraMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(CameraActionMapActions set) { return set.Get(); }
-        public void SetCallbacks(ICameraActionMapActions instance)
+        public static implicit operator InputActionMap(CameraMovementActions set) { return set.Get(); }
+        public void SetCallbacks(ICameraMovementActions instance)
         {
-            if (m_Wrapper.m_CameraActionMapActionsCallbackInterface != null)
+            if (m_Wrapper.m_CameraMovementActionsCallbackInterface != null)
             {
-                @Movement.started -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnMovement;
-                @Rotate.started -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnRotate;
-                @Rotate.performed -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnRotate;
-                @Rotate.canceled -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnRotate;
-                @Zoom.started -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnZoom;
-                @Zoom.performed -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnZoom;
-                @Zoom.canceled -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnZoom;
-                @Swap.started -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnSwap;
-                @Swap.performed -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnSwap;
-                @Swap.canceled -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnSwap;
-                @Zoom2.started -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnZoom2;
-                @Zoom2.performed -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnZoom2;
-                @Zoom2.canceled -= m_Wrapper.m_CameraActionMapActionsCallbackInterface.OnZoom2;
+                @Movement.started -= m_Wrapper.m_CameraMovementActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_CameraMovementActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_CameraMovementActionsCallbackInterface.OnMovement;
             }
-            m_Wrapper.m_CameraActionMapActionsCallbackInterface = instance;
+            m_Wrapper.m_CameraMovementActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
-                @Rotate.started += instance.OnRotate;
-                @Rotate.performed += instance.OnRotate;
-                @Rotate.canceled += instance.OnRotate;
-                @Zoom.started += instance.OnZoom;
-                @Zoom.performed += instance.OnZoom;
-                @Zoom.canceled += instance.OnZoom;
-                @Swap.started += instance.OnSwap;
-                @Swap.performed += instance.OnSwap;
-                @Swap.canceled += instance.OnSwap;
-                @Zoom2.started += instance.OnZoom2;
-                @Zoom2.performed += instance.OnZoom2;
-                @Zoom2.canceled += instance.OnZoom2;
             }
         }
     }
-    public CameraActionMapActions @CameraActionMap => new CameraActionMapActions(this);
-    public interface ICameraActionMapActions
+    public CameraMovementActions @CameraMovement => new CameraMovementActions(this);
+
+    // CameraSwapping
+    private readonly InputActionMap m_CameraSwapping;
+    private ICameraSwappingActions m_CameraSwappingActionsCallbackInterface;
+    private readonly InputAction m_CameraSwapping_Swap;
+    public struct CameraSwappingActions
+    {
+        private @CameraControlActions m_Wrapper;
+        public CameraSwappingActions(@CameraControlActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Swap => m_Wrapper.m_CameraSwapping_Swap;
+        public InputActionMap Get() { return m_Wrapper.m_CameraSwapping; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CameraSwappingActions set) { return set.Get(); }
+        public void SetCallbacks(ICameraSwappingActions instance)
+        {
+            if (m_Wrapper.m_CameraSwappingActionsCallbackInterface != null)
+            {
+                @Swap.started -= m_Wrapper.m_CameraSwappingActionsCallbackInterface.OnSwap;
+                @Swap.performed -= m_Wrapper.m_CameraSwappingActionsCallbackInterface.OnSwap;
+                @Swap.canceled -= m_Wrapper.m_CameraSwappingActionsCallbackInterface.OnSwap;
+            }
+            m_Wrapper.m_CameraSwappingActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Swap.started += instance.OnSwap;
+                @Swap.performed += instance.OnSwap;
+                @Swap.canceled += instance.OnSwap;
+            }
+        }
+    }
+    public CameraSwappingActions @CameraSwapping => new CameraSwappingActions(this);
+
+    // CameraZooming
+    private readonly InputActionMap m_CameraZooming;
+    private ICameraZoomingActions m_CameraZoomingActionsCallbackInterface;
+    private readonly InputAction m_CameraZooming_ZoomMouse;
+    private readonly InputAction m_CameraZooming_ZoomKeyboard;
+    public struct CameraZoomingActions
+    {
+        private @CameraControlActions m_Wrapper;
+        public CameraZoomingActions(@CameraControlActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ZoomMouse => m_Wrapper.m_CameraZooming_ZoomMouse;
+        public InputAction @ZoomKeyboard => m_Wrapper.m_CameraZooming_ZoomKeyboard;
+        public InputActionMap Get() { return m_Wrapper.m_CameraZooming; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CameraZoomingActions set) { return set.Get(); }
+        public void SetCallbacks(ICameraZoomingActions instance)
+        {
+            if (m_Wrapper.m_CameraZoomingActionsCallbackInterface != null)
+            {
+                @ZoomMouse.started -= m_Wrapper.m_CameraZoomingActionsCallbackInterface.OnZoomMouse;
+                @ZoomMouse.performed -= m_Wrapper.m_CameraZoomingActionsCallbackInterface.OnZoomMouse;
+                @ZoomMouse.canceled -= m_Wrapper.m_CameraZoomingActionsCallbackInterface.OnZoomMouse;
+                @ZoomKeyboard.started -= m_Wrapper.m_CameraZoomingActionsCallbackInterface.OnZoomKeyboard;
+                @ZoomKeyboard.performed -= m_Wrapper.m_CameraZoomingActionsCallbackInterface.OnZoomKeyboard;
+                @ZoomKeyboard.canceled -= m_Wrapper.m_CameraZoomingActionsCallbackInterface.OnZoomKeyboard;
+            }
+            m_Wrapper.m_CameraZoomingActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ZoomMouse.started += instance.OnZoomMouse;
+                @ZoomMouse.performed += instance.OnZoomMouse;
+                @ZoomMouse.canceled += instance.OnZoomMouse;
+                @ZoomKeyboard.started += instance.OnZoomKeyboard;
+                @ZoomKeyboard.performed += instance.OnZoomKeyboard;
+                @ZoomKeyboard.canceled += instance.OnZoomKeyboard;
+            }
+        }
+    }
+    public CameraZoomingActions @CameraZooming => new CameraZoomingActions(this);
+
+    // CameraRotation
+    private readonly InputActionMap m_CameraRotation;
+    private ICameraRotationActions m_CameraRotationActionsCallbackInterface;
+    private readonly InputAction m_CameraRotation_Newaction;
+    private readonly InputAction m_CameraRotation_Rotate;
+    public struct CameraRotationActions
+    {
+        private @CameraControlActions m_Wrapper;
+        public CameraRotationActions(@CameraControlActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Newaction => m_Wrapper.m_CameraRotation_Newaction;
+        public InputAction @Rotate => m_Wrapper.m_CameraRotation_Rotate;
+        public InputActionMap Get() { return m_Wrapper.m_CameraRotation; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CameraRotationActions set) { return set.Get(); }
+        public void SetCallbacks(ICameraRotationActions instance)
+        {
+            if (m_Wrapper.m_CameraRotationActionsCallbackInterface != null)
+            {
+                @Newaction.started -= m_Wrapper.m_CameraRotationActionsCallbackInterface.OnNewaction;
+                @Newaction.performed -= m_Wrapper.m_CameraRotationActionsCallbackInterface.OnNewaction;
+                @Newaction.canceled -= m_Wrapper.m_CameraRotationActionsCallbackInterface.OnNewaction;
+                @Rotate.started -= m_Wrapper.m_CameraRotationActionsCallbackInterface.OnRotate;
+                @Rotate.performed -= m_Wrapper.m_CameraRotationActionsCallbackInterface.OnRotate;
+                @Rotate.canceled -= m_Wrapper.m_CameraRotationActionsCallbackInterface.OnRotate;
+            }
+            m_Wrapper.m_CameraRotationActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Newaction.started += instance.OnNewaction;
+                @Newaction.performed += instance.OnNewaction;
+                @Newaction.canceled += instance.OnNewaction;
+                @Rotate.started += instance.OnRotate;
+                @Rotate.performed += instance.OnRotate;
+                @Rotate.canceled += instance.OnRotate;
+            }
+        }
+    }
+    public CameraRotationActions @CameraRotation => new CameraRotationActions(this);
+    public interface ICameraMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnRotate(InputAction.CallbackContext context);
-        void OnZoom(InputAction.CallbackContext context);
+    }
+    public interface ICameraSwappingActions
+    {
         void OnSwap(InputAction.CallbackContext context);
-        void OnZoom2(InputAction.CallbackContext context);
+    }
+    public interface ICameraZoomingActions
+    {
+        void OnZoomMouse(InputAction.CallbackContext context);
+        void OnZoomKeyboard(InputAction.CallbackContext context);
+    }
+    public interface ICameraRotationActions
+    {
+        void OnNewaction(InputAction.CallbackContext context);
+        void OnRotate(InputAction.CallbackContext context);
     }
 }

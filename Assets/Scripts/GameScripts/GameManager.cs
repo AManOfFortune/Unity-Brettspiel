@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 
     public Route CommonRoute;
     [SerializeField] private Dice GameDice;
-    [SerializeField] private CameraController CameraController;
+    [SerializeField] private MapCameraController CameraController;
 
     [SerializeField] private List<Player> Players;
     private int ActivePlayer; // Index of currently playing player in player list
