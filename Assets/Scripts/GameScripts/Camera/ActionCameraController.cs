@@ -65,8 +65,13 @@ public class ActionCameraController : MonoBehaviour
         ActionCamera.transform.LookAt(this.transform);
     }
 
-    private void LookAt(GameObject Target)
+    public void LookAt(GameObject Target)
     {
         this.Target = Target;
+    }
+
+    public void Follow(GameObject Target)
+    {
+
     }
 }

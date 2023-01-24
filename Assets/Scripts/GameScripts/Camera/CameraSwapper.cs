@@ -48,6 +48,7 @@ public class CameraSwapper : MonoBehaviour
     public void SwapCamera(InputAction.CallbackContext obj)
     {
         Debug.Log("Swapping Camera");
+
         if (MapIsActive)
         {
             ShrinkCamera(MapCamera);
@@ -68,12 +69,10 @@ public class CameraSwapper : MonoBehaviour
     private void ShrinkCamera(Camera Camera)
     {
         Camera.rect = new Rect(0, 0.65f, 0.35f, 0.35f);
-        Camera.nearClipPlane = 0.8f;
     }
 
     private void GrowCamera(Camera Camera)
     {
         Camera.rect = new Rect(0, 0, 1, 1);
-        Camera.nearClipPlane = 0.2f;
     }
 }

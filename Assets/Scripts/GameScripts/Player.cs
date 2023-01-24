@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
 
     private List<Stone> Stones = new(); // List of player stones
 
+    public ActionCameraController Camera;
+
     public enum PlayerTypes
     {
         HUMAN,

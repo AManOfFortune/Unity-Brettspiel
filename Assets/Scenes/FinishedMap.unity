@@ -1881,6 +1881,7 @@ MonoBehaviour:
   PlayerBase: {fileID: 71603998}
   StartNode: {fileID: 1347724487}
   GoalRoute: {fileID: 569501306}
+  Camera: {fileID: 1495869098}
 --- !u!1001 &120763066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3959,6 +3960,7 @@ MonoBehaviour:
   PlayerBase: {fileID: 1335454962}
   StartNode: {fileID: 1897432900}
   GoalRoute: {fileID: 1514237479}
+  Camera: {fileID: 1495869098}
 --- !u!1001 &246622024
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11398,10 +11400,10 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
+    y: 0.65
+    width: 0.35
+    height: 0.35
+  near clip plane: 0.5
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -12486,6 +12488,7 @@ MonoBehaviour:
   PlayerBase: {fileID: 1702348831}
   StartNode: {fileID: 2144143123}
   GoalRoute: {fileID: 629928028}
+  Camera: {fileID: 1495869098}
 --- !u!1001 &762837482
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12628,7 +12631,7 @@ MonoBehaviour:
   MovementArcHeight: 0.5
   CommonRoute: {fileID: 1961529994}
   GameDice: {fileID: 1952324357}
-  CameraController: {fileID: 0}
+  CameraController: {fileID: 1495869098}
   Players: []
   DiceArena: {fileID: 1952324356}
 --- !u!114 &768542551
@@ -13396,6 +13399,7 @@ MonoBehaviour:
   PlayerBase: {fileID: 1140508386}
   StartNode: {fileID: 98046378}
   GoalRoute: {fileID: 2048781832}
+  Camera: {fileID: 1495869098}
 --- !u!1001 &805853115
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19573,9 +19577,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.65
-    width: 0.35
-    height: 0.35
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60

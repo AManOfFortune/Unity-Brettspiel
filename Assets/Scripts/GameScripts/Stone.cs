@@ -15,6 +15,8 @@ public class Stone : MonoBehaviour
 
     private GameObject Selector;
 
+    private ActionCameraController CameraController;
+
     private void Awake()
     {
         // Gets the selector and makes it invisible by default
@@ -88,6 +90,7 @@ public class Stone : MonoBehaviour
         }
         else
         {
+            Owner.Camera.LookAt(this.gameObject);
             StartCoroutine(MoveSteps(Owner.StepsToMove));
             Owner.StepsToMove = 0;
         }
@@ -105,6 +108,7 @@ public class Stone : MonoBehaviour
         if (StateMachine.Instance.SomethingIsHappening) yield break;
 
         StateMachine.Instance.SomethingIsHappening = true;
+
         int forward = 1;
         if (steps < 0) forward = -1;
         // Move stone visually

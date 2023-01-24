@@ -29,8 +29,8 @@ public class MapCameraController : MonoBehaviour
     private float minHeight = 5f;
     [SerializeField]
     private float maxHeight = 5f;
-    [SerializeField]
-    private float zoomSpeed = 5f;
+    //[serializeField]
+    //private float zoomSpeed = 5f;
 
     // rotation
     [SerializeField]
@@ -71,28 +71,33 @@ public class MapCameraController : MonoBehaviour
     {
         movement = cameraActions.CameraMovement.Movement;
         zoomKeyboard = cameraActions.CameraZooming.ZoomMouse;
-        Enable();
+
+        cameraActions.CameraRotation.Rotate.performed += RotateCamera;
+        cameraActions.CameraZooming.ZoomKeyboard.performed += ZoomCamera;
+        cameraActions.Enable();
     }
 
     private void OnDisable()
     {
         Disable();
     }
-
+    
     public void Enable()
     {
+        IsActiveCamera = true;
+
         cameraActions.CameraRotation.Rotate.performed += RotateCamera;
         cameraActions.CameraZooming.ZoomKeyboard.performed += ZoomCamera;
         cameraActions.Enable();
-        IsActiveCamera = true;
     }
 
     public void Disable()
     {
+        IsActiveCamera = false;
+
         cameraActions.CameraRotation.Rotate.performed -= RotateCamera;
         cameraActions.CameraZooming.ZoomKeyboard.performed -= ZoomCamera;
         cameraActions.Disable();
-        IsActiveCamera = false;
     }
 
     private void Update()

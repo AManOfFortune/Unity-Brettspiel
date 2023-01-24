@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 
     public Route CommonRoute;
     [SerializeField] private Dice GameDice;
-    [SerializeField] private MapCameraController CameraController;
+    [SerializeField] private ActionCameraController CameraController;
 
     [SerializeField] private List<Player> Players;
     private int ActivePlayer; // Index of currently playing player in player list
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(DelayBySeconds(delayBySeconds, () =>
         {
             //if(GetActivePlayer().Type == Player.PlayerTypes.HUMAN) CameraController.LookAt(new Vector3(-7,0,50)); // Zoom camera to dice arena if player is human
-
+            CameraController.LookAt(GameDice.gameObject);
             GameDice.RollDice();
         }));
     }
