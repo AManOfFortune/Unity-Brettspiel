@@ -24,17 +24,19 @@ public class MapCameraController : MonoBehaviour
     [SerializeField]
     private float stepSize = 5f;
     [SerializeField]
+    private float stepSizeKeyboard = 1f;
+    [SerializeField]
     private float zoomDampening = 5f;
     [SerializeField]
     private float minHeight = 5f;
     [SerializeField]
-    private float maxHeight = 5f;
+    private float maxHeight = 80f;
     //[serializeField]
     //private float zoomSpeed = 5f;
 
     // rotation
     [SerializeField]
-    private float maxRotationSpeed = 1f;
+    private float maxRotationSpeed = 0.5f;
 
     //screen edge motion
     [SerializeField]
@@ -70,10 +72,7 @@ public class MapCameraController : MonoBehaviour
     private void OnEnable()
     {
         movement = cameraActions.CameraMovement.Movement;
-        zoomKeyboard = cameraActions.CameraZooming.ZoomMouse;
-
-        cameraActions.CameraRotation.Rotate.performed += RotateCamera;
-        cameraActions.CameraZooming.ZoomKeyboard.performed += ZoomCamera;
+        zoomKeyboard = cameraActions.CameraZooming.ZoomKeyboard;
         cameraActions.Enable();
     }
 
@@ -87,7 +86,7 @@ public class MapCameraController : MonoBehaviour
         IsActiveCamera = true;
 
         cameraActions.CameraRotation.Rotate.performed += RotateCamera;
-        cameraActions.CameraZooming.ZoomKeyboard.performed += ZoomCamera;
+        cameraActions.CameraZooming.ZoomMouse.performed += ZoomCamera;
         cameraActions.Enable();
     }
 
@@ -96,7 +95,7 @@ public class MapCameraController : MonoBehaviour
         IsActiveCamera = false;
 
         cameraActions.CameraRotation.Rotate.performed -= RotateCamera;
-        cameraActions.CameraZooming.ZoomKeyboard.performed -= ZoomCamera;
+        cameraActions.CameraZooming.ZoomMouse.performed -= ZoomCamera;
         cameraActions.Disable();
     }
 
@@ -214,11 +213,11 @@ public class MapCameraController : MonoBehaviour
     private void GetKeyboardZoom()
     {
         float inputValue = zoomKeyboard.ReadValue<float>();
-        //Debug.Log(inputVector.x + " " + inputVector.y + " " + inputVector.z);
+        Debug.Log("inputValue = " + inputValue);
 
         if (Mathf.Abs(inputValue) > 0.1f)
         {
-            zoomHeight = cameraTransform.localPosition.y + inputValue * stepSize;
+            zoomHeight = cameraTransform.localPosition.y + inputValue * stepSizeKeyboard;
             
             if (zoomHeight < minHeight)
                 zoomHeight = minHeight;
