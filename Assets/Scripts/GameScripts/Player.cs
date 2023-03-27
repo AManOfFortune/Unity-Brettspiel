@@ -76,7 +76,7 @@ public class Player : MonoBehaviour
             // If no moveable stone is found, switch player
             if(moveableStones.Count == 0)
             {
-                StateMachine.Instance.State = StateMachine.States.SWITCH_PLAYER;
+                GameManager.StateMachine.ChangeState(GameManager.SwitchingPlayers);
                 return;
             }
 
@@ -95,7 +95,7 @@ public class Player : MonoBehaviour
             // If no moveable stone is found, switch player
             if (stoneToMove == null) 
             { 
-                StateMachine.Instance.State = StateMachine.States.SWITCH_PLAYER;
+                GameManager.StateMachine.ChangeState(GameManager.SwitchingPlayers);
                 return;
             }
 

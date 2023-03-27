@@ -1,14 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
+using GameScripts.StateMachine;
+using GameScripts.StateMachine.State;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(IStateMachine))]
 public class GameManager : MonoBehaviour
 {
     [NonSerialized] public static GameManager Instance;
+    
+    public static IStateMachine StateMachine {get; private set; }
+
+    public static IState Waiting { get; private set; }
+    public static IState RollingDice { get; private set; }
+    public static IState SwitchingPlayers { get; private set; }
 
     public float MovementSpeed = 5f;
     public float MovementArcHeight = 0.5f;
@@ -27,6 +34,15 @@ public class GameManager : MonoBehaviour
         Players = new(FindObjectsOfType<Player>());
 
         Instance = this;
+        
+        // Get the state machine component
+        StateMachine = GetComponent<IStateMachine>();
+        // Get the state components
+        Waiting = GetComponentInChildren<Waiting>();
+        RollingDice = GetComponentInChildren<RollingDice>();
+        SwitchingPlayers = GetComponentInChildren<SwitchingPlayers>();
+        // Initialize the state machine with state Waiting
+        StateMachine.InitState(Waiting);
     }
 
     private void Start()
@@ -46,7 +62,7 @@ public class GameManager : MonoBehaviour
 
         UIManager.Instance.ShowMessage(Players[ActivePlayer].Name + " starts first!");
 
-        StateMachine.Instance.State = StateMachine.States.ROLL_DICE; // Change state to ROLL_DICE
+        StateMachine.ChangeState(RollingDice);
     }
 
     public Player GetActivePlayer()
@@ -67,9 +83,9 @@ public class GameManager : MonoBehaviour
 
     public void SwitchPlayer(int delayBySeconds = 0)
     {
-        if (StateMachine.Instance.SomethingIsHappening) return;
+        if (StateMachine.IsLocked) return;
 
-        StateMachine.Instance.SomethingIsHappening = true;
+        StateMachine.Lock();
 
         StartCoroutine(DelayBySeconds(delayBySeconds, () =>
         {
@@ -89,10 +105,10 @@ public class GameManager : MonoBehaviour
             // If current player is playing and game is not over, show message and change state to ROLL_DICE
             UIManager.Instance.ShowMessage(GetActivePlayer().Name + "'s turn!");
 
-            StateMachine.Instance.State = StateMachine.States.ROLL_DICE;
+            StateMachine.ChangeState(RollingDice);
         }));
 
-        StateMachine.Instance.SomethingIsHappening = false;
+        StateMachine.Unlock();
     }
 
     // Once physical dice roll is done, this function gets called with the results
@@ -166,7 +182,7 @@ public class GameManager : MonoBehaviour
         {
             // Game over screen
             SceneManager.LoadScene("GameOver");
-            StateMachine.Instance.State = StateMachine.States.WAITING;
+            StateMachine.ChangeState(Waiting);
             return true;
         }
 

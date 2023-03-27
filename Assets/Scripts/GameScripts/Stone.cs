@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using GameScripts.StateMachine;
 using JetBrains.Annotations;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -112,9 +112,9 @@ public class Stone : MonoBehaviour
     // Takes care of "cleaning" node, kicking stones and checking for win too
     private IEnumerator MoveSteps(int steps)
     {
-        if (StateMachine.Instance.SomethingIsHappening) yield break;
+        if (GameManager.StateMachine.IsLocked) yield break;
 
-        StateMachine.Instance.SomethingIsHappening = true;
+        GameManager.StateMachine.Lock();
 
         // Clean current node (-> Old position)
         CurrentPosition.stone = null;
@@ -213,17 +213,17 @@ public class Stone : MonoBehaviour
             CurrentPosition.performActions(this);
         }
 
-        StateMachine.Instance.State = StateMachine.States.SWITCH_PLAYER;
+        GameManager.StateMachine.ChangeState(GameManager.SwitchingPlayers);
 
-        StateMachine.Instance.SomethingIsHappening = false;
+        GameManager.StateMachine.Unlock();
     }
 
     // Enumerator for leaving or returning to base
     private IEnumerator LeaveBase(bool leave)
     {
-        if (StateMachine.Instance.SomethingIsHappening) yield break;
+        if (GameManager.StateMachine.IsLocked) yield break;
 
-        StateMachine.Instance.SomethingIsHappening = true;
+        GameManager.StateMachine.Lock();
 
         // Leaving the base
         if(leave)
@@ -250,7 +250,7 @@ public class Stone : MonoBehaviour
             CurrentPosition = newPosition;
 
             // Roll dice again after leaving the base
-            StateMachine.Instance.State = StateMachine.States.ROLL_DICE;
+            GameManager.StateMachine.ChangeState(GameManager.RollingDice);
         }
         // Returning to base
         else
@@ -265,7 +265,7 @@ public class Stone : MonoBehaviour
         // Make sure leaving the base resets the steps to 0 (previously whatever needed to be rolled to leave the base)
         Owner.StepsToMove = 0;
 
-        StateMachine.Instance.SomethingIsHappening = false;
+        GameManager.StateMachine.Unlock();
     }
 
     // Used to determine end nodes after performing the given steps
