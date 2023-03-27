@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Actionfield : MonoBehaviour, IActionfield
+public abstract class Actionfield : MonoBehaviour
 {
-    public virtual void performAction(Stone Piece)
+    public virtual void PerformAction(Stone Piece)
     {
         Debug.Log("This is an empty Action field");
     }
 
-    public virtual void changeVisuals(GameObject Node)
+    public virtual void ChangeVisuals(GameObject Node)
     {
         Debug.Log("This is an empty Action field");
     }

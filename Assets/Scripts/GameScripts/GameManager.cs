@@ -1,18 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using GameScripts.StateMachine;
+using GameScripts.StateMachine.State;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(IStateMachine))]
 public class GameManager : MonoBehaviour
 {
     [NonSerialized] public static GameManager Instance;
+    
+    public static IStateMachine StateMachine {get; private set; }
+
+    public static IState Waiting { get; private set; }
+    public static IState RollingDice { get; private set; }
+    public static IState SwitchingPlayers { get; private set; }
 
     public float MovementSpeed = 5f;
     public float MovementArcHeight = 0.5f;
 
     public Route CommonRoute;
+    public GameObject NodeSelector;
     [SerializeField] private Dice GameDice;
     [SerializeField] private CameraController CameraController;
 
@@ -25,6 +34,15 @@ public class GameManager : MonoBehaviour
         Players = new(FindObjectsOfType<Player>());
 
         Instance = this;
+        
+        // Get the state machine component
+        StateMachine = GetComponent<IStateMachine>();
+        // Get the state components
+        Waiting = GetComponentInChildren<Waiting>();
+        RollingDice = GetComponentInChildren<RollingDice>();
+        SwitchingPlayers = GetComponentInChildren<SwitchingPlayers>();
+        // Initialize the state machine with state Waiting
+        StateMachine.InitState(Waiting);
     }
 
     private void Start()
@@ -36,13 +54,15 @@ public class GameManager : MonoBehaviour
     {   
         InitializePlayers(); // Initializes the players
 
+        InitializeRoutes(); // Initializes the common route
+
         UIManager.Instance.RollDiceButtonVisible(false); // Makes sure the roll dice button is hidden
 
-        ActivePlayer = UnityEngine.Random.Range(0, Players.Count); // Randomize which player starts
+        ActivePlayer = /*UnityEngine.Random.Range(0, Players.Count)*/3; // Randomize which player starts
 
         UIManager.Instance.ShowMessage(Players[ActivePlayer].Name + " starts first!");
 
-        StateMachine.Instance.State = StateMachine.States.ROLL_DICE; // Change state to ROLL_DICE
+        StateMachine.ChangeState(RollingDice);
     }
 
     public Player GetActivePlayer()
@@ -63,9 +83,9 @@ public class GameManager : MonoBehaviour
 
     public void SwitchPlayer(int delayBySeconds = 0)
     {
-        if (StateMachine.Instance.SomethingIsHappening) return;
+        if (StateMachine.IsLocked) return;
 
-        StateMachine.Instance.SomethingIsHappening = true;
+        StateMachine.Lock();
 
         StartCoroutine(DelayBySeconds(delayBySeconds, () =>
         {
@@ -85,10 +105,10 @@ public class GameManager : MonoBehaviour
             // If current player is playing and game is not over, show message and change state to ROLL_DICE
             UIManager.Instance.ShowMessage(GetActivePlayer().Name + "'s turn!");
 
-            StateMachine.Instance.State = StateMachine.States.ROLL_DICE;
+            StateMachine.ChangeState(RollingDice);
         }));
 
-        StateMachine.Instance.SomethingIsHappening = false;
+        StateMachine.Unlock();
     }
 
     // Once physical dice roll is done, this function gets called with the results
@@ -102,7 +122,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(DelayBySeconds(2, () =>
         {
             // Move with the result and the condition for leaving the base is called
-            GetActivePlayer().Move(diceRollResult, diceRollResult > 0);
+            GetActivePlayer().ChooseMove(diceRollResult, diceRollResult > 0);
         }));
     }
 
@@ -112,8 +132,40 @@ public class GameManager : MonoBehaviour
         {
             player.Type = GameSettings.PlayerNamesAndTypes.ContainsKey(player.Name) ? GameSettings.PlayerNamesAndTypes[player.Name] : Player.PlayerTypes.NPC; // Sets the player type to what was set in main menu, or to default NPC
             player.SpawnStones(); // Spawns all player stones on their respective base
-            player.CreateFullRoute(); // Creates the full route list
+            player.InitializeGoalRoute(); // Creates adjacency list for goal route
+
+            if (player.Name == "Yellow") player.Type = Player.PlayerTypes.HUMAN;
         }
+    }
+
+    private void InitializeRoutes()
+    {
+        // Loop common route entries
+        for (int i = 0; i < CommonRoute.ChildNodeList.Count; i++)
+        {
+            var node = CommonRoute.ChildNodeList[i].GetComponent<Node>();
+
+            var nextNode = 
+            i != CommonRoute.ChildNodeList.Count - 1 ? // If the loop reaches the last entry, the last node gets joined to the first one so we create a loop
+            CommonRoute.ChildNodeList[i + 1].GetComponent<Node>() : 
+            CommonRoute.ChildNodeList[0].GetComponent<Node>();
+
+            node.AdjacentNodes.Add(nextNode);
+        }
+
+        /// SCUFFED SELECTOR CODE HERE
+        /// FUCKING REMOVE THAT SHIT ASAP
+
+        var allNodes = FindObjectsOfType<Node>();
+        foreach (var node in allNodes)
+        {
+            var selector = Instantiate(NodeSelector, node.transform);
+            node.selector = selector;
+            node.ActivateSelector(false);
+        }
+
+        /// END OF SCUFFED SELECTOR CODE
+
     }
 
     private bool CheckIsGameover()
@@ -130,7 +182,7 @@ public class GameManager : MonoBehaviour
         {
             // Game over screen
             SceneManager.LoadScene("GameOver");
-            StateMachine.Instance.State = StateMachine.States.WAITING;
+            StateMachine.ChangeState(Waiting);
             return true;
         }
 

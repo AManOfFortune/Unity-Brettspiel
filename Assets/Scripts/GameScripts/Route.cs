@@ -11,20 +11,21 @@ public class Route : MonoBehaviour
         FillNodes();
     }
 
-    private void OnDrawGizmos() // Visualize node list by drawing lines between them
-    {
-        Gizmos.color = Color.green;
-        FillNodes();
 
-        for (int i = 1; i < ChildNodeList.Count; i++)
-        {
-            var currentPosition = ChildNodeList[i].position;
+    //private void OnDrawGizmos() // Visualize node list by drawing lines between them
+    //{
+    //    Gizmos.color = Color.green;
+    //    FillNodes();
 
-            var previousNodePosition = ChildNodeList[i - 1].position;
+    //    for (int i = 1; i < ChildNodeList.Count; i++)
+    //    {
+    //        var currentPosition = ChildNodeList[i].position;
 
-            Gizmos.DrawLine(previousNodePosition, currentPosition);
-        }
-    }
+    //        var previousNodePosition = ChildNodeList[i - 1].position;
+
+    //        Gizmos.DrawLine(previousNodePosition, currentPosition);
+    //    }
+    //}
 
     private void FillNodes()
     {

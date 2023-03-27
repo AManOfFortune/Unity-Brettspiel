@@ -11,9 +11,10 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Base PlayerBase;
     public Node StartNode; // Node Player starts on when leaving the base
-    public Route GoalRoute; // Final Route where only this player can walk on
+    public Node EndNode; // Node on which Player leaves the main route
 
-    [NonSerialized] public List<Node> FullRoute; // Full route from start to finish
+    public Route GoalRoute; // Final Route ("End" of the player's route) where only this player can walk on
+
     [NonSerialized] public int StepsToMove; // Amount of steps the player can move; When a stone moves, the stone itself decreases this value
     [NonSerialized] public bool HasWon = false; // If all stones are in base gets set to true
 
@@ -46,31 +47,21 @@ public class Player : MonoBehaviour
         }
     }
 
-    // Creates and fills full route List
-    public void CreateFullRoute()
+    // Creates adjacency list for goal route
+    public void InitializeGoalRoute()
     {
-        FullRoute = new();
-
-        // Gets index of start node in common route
-        int startNodeIndex = GameManager.Instance.CommonRoute.ChildNodeList.IndexOf(StartNode.transform);
-
-        // Adds common route to full route, starts at starting postion
-        for (int i = 0; i < GameManager.Instance.CommonRoute.ChildNodeList.Count; i++)
+        // Loop route entries excluding last one since the last node does not have an adjacent one
+        for (int i = 0; i < GoalRoute.ChildNodeList.Count - 1; i++)
         {
-            int tempPos = startNodeIndex + i;
-            tempPos %= GameManager.Instance.CommonRoute.ChildNodeList.Count;
+            var node = GoalRoute.ChildNodeList[i].GetComponent<Node>();
 
-            FullRoute.Add(GameManager.Instance.CommonRoute.ChildNodeList[tempPos].GetComponent<Node>());
-        }
+            var nextNode = GoalRoute.ChildNodeList[i + 1].GetComponent<Node>();
 
-        // Adds goal route at the end of full route
-        for (int i = 0; i < GoalRoute.ChildNodeList.Count; i++)
-        {
-            FullRoute.Add(GoalRoute.ChildNodeList[i].GetComponent<Node>());
+            node.AdjacentNodes.Add(nextNode);
         }
     }
 
-    public void Move(int steps, bool canLeaveBase)
+    public void ChooseMove(int steps, bool canLeaveBase)
     {
         // Saves steps we can move
         // Gets decreased, reset etc. in the Stone.Move() function
@@ -85,7 +76,7 @@ public class Player : MonoBehaviour
             // If no moveable stone is found, switch player
             if(moveableStones.Count == 0)
             {
-                StateMachine.Instance.State = StateMachine.States.SWITCH_PLAYER;
+                GameManager.StateMachine.ChangeState(GameManager.SwitchingPlayers);
                 return;
             }
 
@@ -93,6 +84,8 @@ public class Player : MonoBehaviour
             {
                 stone.ShowSelector(true);
             }
+
+            UIManager.Instance.ShowMessage("Select stone to move");
         }
         // If player is NPC, find "best" stone to move and move it
         else if (Type == PlayerTypes.NPC)
@@ -102,7 +95,7 @@ public class Player : MonoBehaviour
             // If no moveable stone is found, switch player
             if (stoneToMove == null) 
             { 
-                StateMachine.Instance.State = StateMachine.States.SWITCH_PLAYER;
+                GameManager.StateMachine.ChangeState(GameManager.SwitchingPlayers);
                 return;
             }
 
@@ -182,7 +175,7 @@ public class Player : MonoBehaviour
                     break;
                 }
                 // If a kick is not possible, check if a regular move is possible
-                else if (stone.RegularMovePossible(steps))
+                if (stone.RegularMovePossible(steps))
                 {
                     moveableStones.Add(stone);
                 }
@@ -207,9 +200,9 @@ public class Player : MonoBehaviour
             {
                 moveableStones.Clear();
                 break;
-            } else { 
-                moveableStones.Add(stone);
             }
+
+            moveableStones.Add(stone);
         }
 
         return moveableStones;
